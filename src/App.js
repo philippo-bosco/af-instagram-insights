@@ -80,6 +80,12 @@ function App() {
                             <button
                               onClick={logInToFB}
                               className="btn action-btn"
+                              data-width=""
+                              data-size="large"
+                              data-button-type="continue_with"
+                              data-layout="rounded"
+                              data-auto-logout-link="false"
+                              data-use-continue-as="false"
                             >
                               Login with Facebook
                             </button>
