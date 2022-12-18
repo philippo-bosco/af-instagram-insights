@@ -1,19 +1,22 @@
 import "./App.css";
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 function App() {
   const [facebookUserAccessToken, setFacebookUserAccessToken] = useState("");
 
   // Controllo se l'utente è già autenticato con Facebook
-  /*  useEffect(() => {
+  useEffect(() => {
     window.FB.getLoginStatus(response => {
       setFacebookUserAccessToken(response.authResponse?.accessToken);
+      window.FB.api("/me", function (response) {
+        console.log("Good to see you, " + response.name + ".");
+      });
     });
-  }, []);*/
+  }, []);
 
-  // LOGIN con Facebook
-  const logInToFB = () => {
+  // LOGIN con Facebook SDK Javascript, inutile se c'è il bottone implementato da facebook
+  /* const logInToFB = () => {
     window.FB.login(
       response => {
         setFacebookUserAccessToken(response.authResponse?.accessToken);
@@ -23,7 +26,7 @@ function App() {
         scope: "instagram_basic,pages_show_list",
       }
     );
-  };
+  };*/
 
   // LOGOUT da Facebook
   const logOutOfFB = () => {
@@ -32,19 +35,6 @@ function App() {
     });
   };
 
-  // GET pagine facebook Instagram Business Account
-  //TEMPORANEAMENTE DEVO CAPIRE A COSA SERVE STA COSA
-  /*  const getFacebookPages = () => {
-    return new Promise(resolve => {
-      window.FB.api(
-        "me/accounts",
-        { access_token: facebookUserAccessToken },
-        response => {
-          resolve(response.data);
-        }
-      );
-    });
-  };*/
   return (
     <div>
       <section className="h-100 gradient-form">
@@ -77,18 +67,15 @@ function App() {
                               Log out of Facebook
                             </button>
                           ) : (
-                            <button
-                              onClick={logInToFB}
-                              className="btn action-btn"
+                            <div
+                              className="fb-login-button"
                               data-width=""
                               data-size="large"
-                              data-button-type="continue_with"
-                              data-layout="rounded"
+                              data-button-type="login_with"
+                              data-layout="default"
                               data-auto-logout-link="false"
                               data-use-continue-as="false"
-                            >
-                              Login with Facebook
-                            </button>
+                            ></div>
                           )}
                         </div>
                       </form>
@@ -117,35 +104,8 @@ function App() {
         integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
         crossOrigin="anonymous"
       ></script>
-      {facebookUserAccessToken ? (
-        <section className="app-section">
-          {console.log("FATTO BRO SIAMO LOGGATI")}
-        </section>
-      ) : null}
+      {facebookUserAccessToken ? console.log(facebookUserAccessToken) : null}
     </div>
-    /*
-    <main id="app-main">
-      <div>
-        <section className="app-section">
-          <h3>1. Log in with Facebook</h3>
-          {facebookUserAccessToken ? (
-            <button onClick={logOutOfFB} className="btn action-btn">
-              Log out of Facebook
-            </button>
-          ) : (
-            <button onClick={logInToFB} className="btn action-btn">
-              Login with Facebook
-            </button>
-          )}
-        </section>
-      </div>
-      {facebookUserAccessToken ? (
-        <section className="app-section">
-          console.log("FATTO BRO SIAMO LOGGATI")
-        </section>
-      ) : null}
-    </main>
-  */
   );
 }
 
