@@ -20,3 +20,11 @@ function App() {
 }
 
 export default App;
+
+/**
+ * ACCOUNTPAGE {structure}:
+ * |
+ * |-> NAVBAR (ROUTE):
+ *      |-> profile
+ *      |-> insights
+ */
