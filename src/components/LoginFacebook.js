@@ -4,8 +4,8 @@ import { useState, useEffect } from "react";
 
 function LoginFacebook() {
   const [facebookUserAccessToken, setFacebookUserAccessToken] = useState("");
-  const [facebookUserID, setFacebookUserID] = useState("");
-  const [facebookUserName, setFacebookUserName] = useState("");
+  let [facebookUserID, setFacebookUserID] = useState("");
+  let [facebookUserName, setFacebookUserName] = useState("");
 
   // Controllo se l'utente è già autenticato con Facebook
   useEffect(() => {
@@ -38,7 +38,9 @@ function LoginFacebook() {
     window.FB.api("/me", function (response) {
       setFacebookUserID((facebookUserID = response.id));
       setFacebookUserName((facebookUserName = response.name));
-      console.log("Good to see you, " + response.name + ".");
+      console.log(
+        "Good to see you, " + response.name + "." + "Your ID: " + response.id
+      );
       console.log(response);
     });
   };
@@ -113,6 +115,7 @@ function LoginFacebook() {
         crossOrigin="anonymous"
       ></script>
       {facebookUserAccessToken ? console.log(facebookUserAccessToken) : null}
+      {facebookUserAccessToken ? nomeFacebookAccount() : null}
     </div>
   );
 }

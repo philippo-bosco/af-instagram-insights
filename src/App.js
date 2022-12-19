@@ -11,7 +11,8 @@ import LoginFacebook from "./components/LoginFacebook";
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<LoginFacebook />} /> {/* semplice path */}
+      {/* semplice dichiarazione path x Component */}
+      <Route path="/" element={<LoginFacebook />} />{" "}
     </Routes>
   );
 }
