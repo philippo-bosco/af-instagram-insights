@@ -1,6 +1,8 @@
 /**
  * TODO today
- * - routing di
+ * - routing del login -> account page dopo LOGIN
+ * - passare accessToken da LoginFacebook a AccountPage ed eseguire le query necessarie
+ * - display nome e cognome e immagine profilo AccountPage
  */
 
 import "./App.css";
