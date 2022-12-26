@@ -2,7 +2,7 @@ import "../App.css";
 import React from "react";
 import { useState, useEffect } from "react";
 
-function LoginFacebook() {
+export default function LoginFacebook() {
   const [facebookUserAccessToken, setFacebookUserAccessToken] = useState("");
   let [facebookUserID, setFacebookUserID] = useState("");
   let [facebookUserName, setFacebookUserName] = useState("");
@@ -119,5 +119,3 @@ function LoginFacebook() {
     </div>
   );
 }
-
-export default LoginFacebook;

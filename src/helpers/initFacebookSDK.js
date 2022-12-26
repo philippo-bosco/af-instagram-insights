@@ -1,4 +1,5 @@
-const FACEBOOK_APP_ID = "643639507384543";
+//const FACEBOOK_APP_ID = process.env.FACEBOOK_APP_ID;
+const FACEBOOK_APP_ID = process.env.REACT_APP_FACEBOOK_APP_ID;
 
 export default function initFacebookSDK() {
   return new Promise(resolve => {
@@ -10,6 +11,8 @@ export default function initFacebookSDK() {
         xfbml: true,
         version: "v15.0",
       });
+
+      window.FB.AppEvents.logPageView(); //non so cosa faccia, documentarsi
       resolve();
     };
 
