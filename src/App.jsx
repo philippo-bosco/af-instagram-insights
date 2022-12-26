@@ -1,7 +1,8 @@
 /**
- * TODO today
- * - routing del login -> account page dopo LOGIN
- * - display nome e cognome e immagine profilo AccountPage
+ * TODO
+ * - sistemare privateRoute (non so come si fa a reindirizzare con i dati che ho)
+ * - sistemare Login Page perchè annulla la form (probabile errore di routing)
+ * - sistemare funzioni di cattura account Instagram in AccountService.js
  */
 
 //import React libraries

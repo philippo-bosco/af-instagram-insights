@@ -1,5 +1,5 @@
-//import axios from "axios";
-import { useState } from "react";
+//questo file deve essere usato per tutte le funzioni di callback della applicazione, in modo da trovare tutto qui sopra e utilizzare le risposte di una funzione per eseguirne altre.
+
 import { history } from "../helpers/history";
 //import React from "react";
 
