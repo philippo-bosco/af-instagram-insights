@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Redirect } from "react-router-dom";
+import { Route, Navigate } from "react-router-dom";
 
 import { AccountService } from "./AccountService";
 
@@ -16,8 +16,8 @@ export default function PrivateRoute({ component: Component, ...rest }) {
         if (logged.status !== "connected") {
           // not logged in so redirect to login page with the return url
           return (
-            <Redirect
-              to={{ pathname: "/login", state: { from: props.location } }}
+            <Navigate
+              to={{ pathname: "/login", state: { from: props.location } }} replace={true}
             />
           );
         }

@@ -6,7 +6,7 @@ export default function initFacebookSDK() {
     // Wait for the Facebook SDK to initialize before starting the React app.
     window.fbAsyncInit = function () {
       window.FB.init({
-        appId: FACEBOOK_APP_ID,
+        appId:FACEBOOK_APP_ID,
         cookie: true,
         xfbml: true,
         version: "v15.0",

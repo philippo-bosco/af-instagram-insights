@@ -7,30 +7,53 @@
 
 //import React libraries
 import React from "react";
-import { Route, Switch, Redirect, useLocation } from "react-router-dom";
+import { Route, Routes, Navigate, useLocation } from "react-router-dom";
 
 //import customs
 import "./App.css";
 import PrivateRoute from "./components/PrivateRoute";
 
-import Login from "pages/Login";
-import { Home } from "./pages/HomeAccount";
-import { Nav } from "./components/Nav";
-
+import Login from "./pages/Login";
+import  Home  from "./pages/HomeAccount";
+import  Navigation  from "./pages/Navbar";
+import user from "./pages/user.jpg";
+import Grafici from "./pages/grafici";
 function App() {
   const pathname = useLocation().pathname || "";
+
   return (
+    <>
     <div>
-      {/*<Nav />*/}
+      <Navigation
+        src={user}
+        nome="Gesualdo"
+        cognome="LoMonaco"
+        follow="104"
+        seguiti="208"
+      />
       <div className="container pt-4">
-        <Switch>
-          <Redirect from="/:url*(/+)" to={pathname.slice(0, -1)} />
-          <Route path="/login" component={Login} />
-          <PrivateRoute exact path="/" component={Home} />
-          <Redirect from="*" to="/" />
-        </Switch>
+        
+        
+        <Routes>
+          <Route path="/login" element={<Login></Login>} />
+          <Route path="/stats" element={<Grafici></Grafici>}/>
+          <Route exact path="/home" element={<Home
+                                              link="https://www.laleggepertutti.it/wp-content/uploads/2020/03/legge104.png"
+                                              didascalia="complimenti hai vinto una 104">
+                                             </Home>} >
+
+          </Route>
+          <Route path="*" render={() => <Navigate to="/"/>} />
+          <Route path="/" render={() => <Navigate to="/login"/>} />
+          <Route path="/:url*(/+)" render={()=> <Navigate to={pathname.slice(0,-1)}/>}/>
+        </Routes>
+       {/*<Navigate from="/:url*(/+)" to={pathname.slice(0, -1)} replace={true} /> -->
+        
+  <Navigate from="*" to="/" replace={true}/> */}
+  
       </div>
     </div>
+    </>
   );
 }
 

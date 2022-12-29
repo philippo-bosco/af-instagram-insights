@@ -76,3 +76,82 @@
 .insta-icon:before {
   border-radius: 25%;
 }
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+.btn-primary{
+  background-color: black !important ;
+  border-color: black !important;
+  color: white !important;
+}
+.btn-primary:hover{
+  background-color: white !important ;
+  border-color: white !important;
+  color: black !important;
+}
+.btngroup{
+  position: right !important;
+}
+.col{
+  background-color: black !important;
+  align-content: center;
+  
+}
+div{
+  background-color: black;
+  color: white;
+}
+.root{
+  background-color: black;
+}
+.HoverDiv:hover {
+  width : '20rem';
+  text-align: center;
+}
+.div-grafici{
+  width: 30%;
+  height: auto;
+}
+.div-post{
+  width: 30%;
+  height: auto;
+}
+button:disabled {
+  cursor: not-allowed;
+  color : white !important ;
+}

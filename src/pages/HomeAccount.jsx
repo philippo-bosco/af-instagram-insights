@@ -1,14 +1,15 @@
 import React from "react";
+import Post from "../components/post"
 /*
 import { useState, useEffect } from "react";
 import { Link, renderMatches } from "react-router-dom";
 
 import { AccountService } from "../components/AccountService";
 */
-export function Home() {
+export default function Home(props) {
   return (
     <div>
-      <h1>CIAOOO</h1>
+      <Post src={props.link} didascalia={props.didascalia}/>
     </div>
   );
 }
