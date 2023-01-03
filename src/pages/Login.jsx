@@ -1,21 +1,39 @@
-import React, { useEffect } from "react";
-import { AccountService } from "../components/AccountService";
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
-export default function Login({ history }) {
+export default function Login({ isAuth, toggleAuth, AT, ToggleAT }) {
+  const navigate = useNavigate();
+  //da guardare
   useEffect(() => {
-    window.FB.getLoginStatus(function (response) {
+    window.FB.getLoginStatus(response => {
+      console.log(response);
       statusChangeCallback(response);
     });
   });
 
-  // Controllo se l'utente è già stato autenticato
-  //duplicato di AccountService.statusChangeCallback WARNING
-  function statusChangeCallback(response) {
-    console.log("statusChangeCallback");
-    console.log(response);
+  function loginToFB() {
+    window.FB.login(
+      response => {
+        console.log(response);
+        statusChangeCallback(response);
+      },
+      {
+        // Scopes that allow us to publish content to Instagram
+        scope: "instagram_basic,pages_show_list",
+      }
+    );
+  }
+  console.log(isAuth);
+  console.log(AT);
+
+  async function statusChangeCallback(response) {
     if (response.status === "connected") {
-      history.push("/");
-    }
+      toggleAuth((isAuth = true));
+      ToggleAT((AT = response.authResponse.accessToken));
+      navigate("/");
+    } else toggleAuth((isAuth = null));
+    ToggleAT((AT = ""));
+    navigate("/login");
   }
 
   return (
@@ -44,7 +62,7 @@ export default function Login({ history }) {
                         <div className="card-body">
                           <button
                             className="btn btn-facebook"
-                            onClick={AccountService.Login}
+                            onClick={loginToFB}
                           >
                             <i className="fa fa-facebook mr-1"></i>
                             Login with Facebook

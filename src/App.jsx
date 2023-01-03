@@ -1,68 +1,51 @@
-/**
- * TODO
- * - sistemare privateRoute (non so come si fa a reindirizzare con i dati che ho)
- * - sistemare Login Page perchè annulla la form (probabile errore di routing)
- * - sistemare funzioni di cattura account Instagram in AccountService.js
- */
-
-//import React libraries
 import React from "react";
-import { Route, Routes, Navigate, useLocation } from "react-router-dom";
+import { useState } from "react";
 
-//import customs
+//import custom
 import "./App.css";
-import PrivateRoute from "./components/PrivateRoute";
-
+import Home from "./pages/HomeAccount";
 import Login from "./pages/Login";
-import  Home  from "./pages/HomeAccount";
-import  Navigation  from "./pages/Navbar";
-import user from "./pages/user.jpg";
-import Grafici from "./pages/grafici";
-function App() {
-  const pathname = useLocation().pathname || "";
+import { Route, Routes } from "react-router-dom";
+import PrivateRoutes from "./components/PrivateRoutes";
+//import PageNotFound from "./pages/PageNotFound";
+import Navbar from "./components/NavBar";
+
+export default function App() {
+  const [isAuthenticated, setisAuthenticated] = useState(null);
+  const [FBaccessTOKEN, setFBaccessToken] = useState("");
+  //const pathname = useLocation().pathname || "";
+
+  //non cè ancora un controllo se il tipo è gia stato autenticato o no
 
   return (
-    <>
     <div>
-      <Navigation
-        src={user}
-        nome="Gesualdo"
-        cognome="LoMonaco"
-        follow="104"
-        seguiti="208"
-      />
-      <div className="container pt-4">
-        
-        
-        <Routes>
-          <Route path="/login" element={<Login></Login>} />
-          <Route path="/stats" element={<Grafici></Grafici>}/>
-          <Route exact path="/home" element={<Home
-                                              link="https://www.laleggepertutti.it/wp-content/uploads/2020/03/legge104.png"
-                                              didascalia="complimenti hai vinto una 104">
-                                             </Home>} >
-
-          </Route>
-          <Route path="*" render={() => <Navigate to="/"/>} />
-          <Route path="/" render={() => <Navigate to="/login"/>} />
-          <Route path="/:url*(/+)" render={()=> <Navigate to={pathname.slice(0,-1)}/>}/>
-        </Routes>
-       {/*<Navigate from="/:url*(/+)" to={pathname.slice(0, -1)} replace={true} /> -->
-        
-  <Navigate from="*" to="/" replace={true}/> */}
-  
-      </div>
+      <Navbar isAuth={isAuthenticated} toggleAuth={setisAuthenticated} />
+      <Routes>
+        {/*<Redirect from="/:url*(/+)" to={pathname.slice(0, -1)} />*/}
+        <Route
+          path="/login"
+          element={
+            <Login
+              isAuth={isAuthenticated}
+              toggleAuth={setisAuthenticated}
+              AT={FBaccessTOKEN}
+              ToggleAT={setFBaccessToken}
+            />
+          }
+        />
+        <Route element={<PrivateRoutes isAuth={isAuthenticated} />}>
+          <Route
+            isAuth={isAuthenticated}
+            toggleAuth={setisAuthenticated}
+            AT={FBaccessTOKEN}
+            ToggleAT={setFBaccessToken}
+            path="/"
+            element={<Home />}
+            exact
+          />
+        </Route>
+        {/*<Route path="*" element={<PageNotFound />} />*/}
+      </Routes>
     </div>
-    </>
   );
 }
-
-export default App;
-
-/**
- * ACCOUNTPAGE {structure}:
- * |
- * |-> NAVBAR (ROUTE):
- *      |-> profile
- *      |-> insights
- */

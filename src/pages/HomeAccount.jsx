@@ -1,15 +1,11 @@
 import React from "react";
-import Post from "../components/post"
-/*
-import { useState, useEffect } from "react";
-import { Link, renderMatches } from "react-router-dom";
 
-import { AccountService } from "../components/AccountService";
-*/
-export default function Home(props) {
+export default function Home({ isAuth, toggleAuth, AT, ToggleAT }) {
   return (
-    <div>
-      <Post src={props.link} didascalia={props.didascalia}/>
+    <div className="card mt-5 text-center">
+      <div className="card-body">
+        <h1>Benvenuto questo è il tuo accessToken: {AT}</h1>
+      </div>
     </div>
   );
 }

@@ -1,4 +1,3 @@
-//const FACEBOOK_APP_ID = process.env.FACEBOOK_APP_ID;
 const FACEBOOK_APP_ID = process.env.REACT_APP_FACEBOOK_APP_ID;
 
 export default function initFacebookSDK() {
@@ -6,7 +5,7 @@ export default function initFacebookSDK() {
     // Wait for the Facebook SDK to initialize before starting the React app.
     window.fbAsyncInit = function () {
       window.FB.init({
-        appId:FACEBOOK_APP_ID,
+        appId: FACEBOOK_APP_ID,
         cookie: true,
         xfbml: true,
         version: "v15.0",
