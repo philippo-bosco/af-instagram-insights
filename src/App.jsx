@@ -17,7 +17,8 @@ import Login from "./pages/Login";
 import  Home  from "./pages/HomeAccount";
 import  Navigation  from "./pages/Navbar";
 import user from "./pages/user.jpg";
-import Grafici from "./pages/grafici";
+import Torta from "./pages/grafici";
+import Barre from"./pages/Barre";
 function App() {
   const pathname = useLocation().pathname || "";
 
@@ -36,7 +37,13 @@ function App() {
         
         <Routes>
           <Route path="/login" element={<Login></Login>} />
-          <Route path="/stats" element={<Grafici></Grafici>}/>
+          <Route path="/stats" element={
+                                        <>
+                                        <Torta></Torta>
+                                        <Barre></Barre>
+                                        </>                                      
+                                      
+                                      } />
           <Route exact path="/home" element={<Home
                                               link="https://www.laleggepertutti.it/wp-content/uploads/2020/03/legge104.png"
                                               didascalia="complimenti hai vinto una 104">

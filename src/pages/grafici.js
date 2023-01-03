@@ -31,7 +31,7 @@ export const data = {
   ],
 };
 
-function Grafici() {
+function Torta() {
   return <Pie data={data} />;
 }
-export default Grafici;
+export default Torta;
