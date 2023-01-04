@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate, } from "react-router-dom";
 import { useEffect } from "react";
 
 export default function Login({ isAuth, toggleAuth, AT, ToggleAT }) {
@@ -6,16 +6,16 @@ export default function Login({ isAuth, toggleAuth, AT, ToggleAT }) {
   //da guardare
   useEffect(() => {
     window.FB.getLoginStatus(response => {
-      console.log(response);
+      console.log(response.authResponse.accessToken);
       statusChangeCallback(response);
     });
-  });
+  },[]);
 
   function loginToFB() {
     window.FB.login(
       response => {
         console.log(response);
-        statusChangeCallback(response);
+       // statusChangeCallback(response);
       },
       {
         // Scopes that allow us to publish content to Instagram
@@ -23,15 +23,15 @@ export default function Login({ isAuth, toggleAuth, AT, ToggleAT }) {
       }
     );
   }
-  console.log(isAuth);
+
   console.log(AT);
 
   async function statusChangeCallback(response) {
     if (response.status === "connected") {
       toggleAuth((isAuth = true));
       ToggleAT((AT = response.authResponse.accessToken));
-      navigate("/");
-    } else toggleAuth((isAuth = null));
+      
+    } else toggleAuth((isAuth != true));
     ToggleAT((AT = ""));
     navigate("/login");
   }
@@ -60,6 +60,7 @@ export default function Login({ isAuth, toggleAuth, AT, ToggleAT }) {
                       <form>
                         <p>Please login to your account</p>
                         <div className="card-body">
+                          <Link to="/">
                           <button
                             className="btn btn-facebook"
                             onClick={loginToFB}
@@ -67,6 +68,7 @@ export default function Login({ isAuth, toggleAuth, AT, ToggleAT }) {
                             <i className="fa fa-facebook mr-1"></i>
                             Login with Facebook
                           </button>
+                          </Link>
                         </div>
                       </form>
                     </div>
