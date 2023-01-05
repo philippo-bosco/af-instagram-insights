@@ -3,10 +3,11 @@ import { useEffect } from "react";
 
 export default function Login({ isAuth, toggleAuth, AT, ToggleAT }) {
   const navigate = useNavigate();
+  const navigatelogin = useNavigate();
   //da guardare
   useEffect(() => {
     window.FB.getLoginStatus(response => {
-      console.log(response.authResponse.accessToken);
+    //  console.log(response.authResponse.accessToken);
       statusChangeCallback(response);
     });
   },[]);
@@ -15,7 +16,7 @@ export default function Login({ isAuth, toggleAuth, AT, ToggleAT }) {
     window.FB.login(
       response => {
         console.log(response);
-       // statusChangeCallback(response);
+        statusChangeCallback(response);
       },
       {
         // Scopes that allow us to publish content to Instagram
@@ -24,16 +25,19 @@ export default function Login({ isAuth, toggleAuth, AT, ToggleAT }) {
     );
   }
 
-  console.log(AT);
+ // console.log(AT);
 
   async function statusChangeCallback(response) {
     if (response.status === "connected") {
       toggleAuth((isAuth = true));
       ToggleAT((AT = response.authResponse.accessToken));
+      console.log(AT);
+      navigate("/")
       
-    } else toggleAuth((isAuth != true));
+    } else {toggleAuth((isAuth == undefined));
+      console.log(isAuth);
     ToggleAT((AT = ""));
-    navigate("/login");
+    navigatelogin("/login");}
   }
 
   return (
@@ -60,7 +64,7 @@ export default function Login({ isAuth, toggleAuth, AT, ToggleAT }) {
                       <form>
                         <p>Please login to your account</p>
                         <div className="card-body">
-                          <Link to="/">
+                         
                           <button
                             className="btn btn-facebook"
                             onClick={loginToFB}
@@ -68,7 +72,7 @@ export default function Login({ isAuth, toggleAuth, AT, ToggleAT }) {
                             <i className="fa fa-facebook mr-1"></i>
                             Login with Facebook
                           </button>
-                          </Link>
+                         
                         </div>
                       </form>
                     </div>
