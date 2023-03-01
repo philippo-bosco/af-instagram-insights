@@ -1,18 +1,20 @@
-import { Link, useNavigate, } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 
 export default function Login({ isAuth, toggleAuth, AT, ToggleAT }) {
   const navigate = useNavigate();
   const navigatelogin = useNavigate();
-  //da guardare
-  useEffect(() => {
-    window.FB.getLoginStatus(response => {
-    //  console.log(response.authResponse.accessToken);
-      statusChangeCallback(response);
-    });
-  },[]);
 
-  function loginToFB() {
+  /*
+  FUNZIONAMENTO useEffect --> se viene dichiarato e ci passiamo dentro qualsiasi cosa senza mettere un array finale, 
+  useEffect verrà eseguito ad ogni render.
+  Se viene dichiarato alla fine, useEffect verrà eseguito solo al primo render.
+  Props e State dichiarati nell'array significa che useEffect verrà eseguto ogni volta che il loro stato verrà cambiato. 
+  */
+
+  // useEffect(() => {}, []);
+
+  async function loginToFB() {
     window.FB.login(
       response => {
         console.log(response);
@@ -25,19 +27,20 @@ export default function Login({ isAuth, toggleAuth, AT, ToggleAT }) {
     );
   }
 
- // console.log(AT);
+  // console.log(AT);
 
   async function statusChangeCallback(response) {
     if (response.status === "connected") {
       toggleAuth((isAuth = true));
       ToggleAT((AT = response.authResponse.accessToken));
       console.log(AT);
-      navigate("/")
-      
-    } else {toggleAuth((isAuth == undefined));
+      navigate("/");
+    } else {
+      toggleAuth(isAuth === undefined);
       console.log(isAuth);
-    ToggleAT((AT = ""));
-    navigatelogin("/login");}
+      ToggleAT((AT = ""));
+      navigatelogin("/login");
+    }
   }
 
   return (
@@ -64,7 +67,6 @@ export default function Login({ isAuth, toggleAuth, AT, ToggleAT }) {
                       <form>
                         <p>Please login to your account</p>
                         <div className="card-body">
-                         
                           <button
                             className="btn btn-facebook"
                             onClick={loginToFB}
@@ -72,7 +74,6 @@ export default function Login({ isAuth, toggleAuth, AT, ToggleAT }) {
                             <i className="fa fa-facebook mr-1"></i>
                             Login with Facebook
                           </button>
-                         
                         </div>
                       </form>
                     </div>
