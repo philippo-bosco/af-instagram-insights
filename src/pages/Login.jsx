@@ -1,9 +1,16 @@
-import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 export default function Login({ isAuth, toggleAuth, AT, ToggleAT }) {
   const navigate = useNavigate();
-  const navigatelogin = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    if (isAuth) {
+      navigate("/");
+    }
+  }, [isAuth, navigate]);
 
   /*
   FUNZIONAMENTO useEffect --> se viene dichiarato e ci passiamo dentro qualsiasi cosa senza mettere un array finale, 
@@ -11,35 +18,29 @@ export default function Login({ isAuth, toggleAuth, AT, ToggleAT }) {
   Se viene dichiarato alla fine, useEffect verrà eseguito solo al primo render.
   Props e State dichiarati nell'array significa che useEffect verrà eseguto ogni volta che il loro stato verrà cambiato. 
   */
-
-  // useEffect(() => {}, []);
-
   async function loginToFB() {
+    setIsLoading(true);
+
     window.FB.login(
       response => {
         console.log(response);
         statusChangeCallback(response);
       },
       {
-        // Scopes that allow us to publish content to Instagram
         scope: "instagram_basic,pages_show_list",
       }
     );
   }
 
-  // console.log(AT);
-
   async function statusChangeCallback(response) {
+    setIsLoading(false);
+
     if (response.status === "connected") {
-      toggleAuth((isAuth = true));
-      ToggleAT((AT = response.authResponse.accessToken));
-      console.log(AT);
-      navigate("/");
+      toggleAuth(true);
+      ToggleAT(response.authResponse.accessToken);
     } else {
-      toggleAuth(isAuth === undefined);
-      console.log(isAuth);
-      ToggleAT((AT = ""));
-      navigatelogin("/login");
+      toggleAuth(false);
+      ToggleAT("");
     }
   }
 
@@ -70,7 +71,15 @@ export default function Login({ isAuth, toggleAuth, AT, ToggleAT }) {
                           <button
                             className="btn btn-facebook"
                             onClick={loginToFB}
+                            disabled={isLoading}
                           >
+                            {isLoading && (
+                              <span
+                                className="spinner-border spinner-border-sm mr-2"
+                                role="status"
+                                aria-hidden="true"
+                              ></span>
+                            )}
                             <i className="fa fa-facebook mr-1"></i>
                             Login with Facebook
                           </button>
