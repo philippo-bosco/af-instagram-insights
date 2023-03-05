@@ -7,10 +7,12 @@ export default function Login({ isAuth, toggleAuth, AT, ToggleAT }) {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    if (isAuth) {
+    if (isAuth && AT) {
+      console.log(isAuth);
+      console.log(AT);
       navigate("/");
     }
-  }, [isAuth, navigate]);
+  }, [isAuth, AT, navigate]);
 
   /*
   FUNZIONAMENTO useEffect --> se viene dichiarato e ci passiamo dentro qualsiasi cosa senza mettere un array finale, 
@@ -18,6 +20,7 @@ export default function Login({ isAuth, toggleAuth, AT, ToggleAT }) {
   Se viene dichiarato alla fine, useEffect verrà eseguito solo al primo render.
   Props e State dichiarati nell'array significa che useEffect verrà eseguto ogni volta che il loro stato verrà cambiato. 
   */
+
   async function loginToFB() {
     setIsLoading(true);
 
@@ -27,7 +30,7 @@ export default function Login({ isAuth, toggleAuth, AT, ToggleAT }) {
         statusChangeCallback(response);
       },
       {
-        scope: "instagram_basic,pages_show_list",
+        scope: "instagram_basic,pages_show_list, email",
       }
     );
   }
@@ -37,7 +40,7 @@ export default function Login({ isAuth, toggleAuth, AT, ToggleAT }) {
 
     if (response.status === "connected") {
       toggleAuth(true);
-      ToggleAT(response.authResponse.accessToken);
+      ToggleAT(response.authResponse?.accessToken);
     } else {
       toggleAuth(false);
       ToggleAT("");

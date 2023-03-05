@@ -19,7 +19,7 @@ export default function App() {
 
   return (
     <div>
-      <Navbar isAuth={isAuthenticated} toggleAuth={setisAuthenticated} />
+      <Navbar isAuth={isAuthenticated} />
       <Routes>
         {/*<Redirect from="/:url*(/+)" to={pathname.slice(0, -1)} />*/}
         <Route
@@ -33,14 +33,24 @@ export default function App() {
             />
           }
         />
-        <Route element={<PrivateRoutes isAuth={isAuthenticated} />}>
+        <Route
+          element={
+            <PrivateRoutes
+              isAuth={isAuthenticated}
+              toggleAuth={setisAuthenticated}
+            />
+          }
+        >
           <Route
-            isAuth={isAuthenticated}
-            toggleAuth={setisAuthenticated}
-            AT={FBaccessTOKEN}
-            ToggleAT={setFBaccessToken}
             path="/"
-            element={<Home />}
+            element={
+              <Home
+                isAuth={isAuthenticated}
+                toggleAuth={setisAuthenticated}
+                AT={FBaccessTOKEN}
+                ToggleAT={setFBaccessToken}
+              />
+            }
             exact
           />
         </Route>

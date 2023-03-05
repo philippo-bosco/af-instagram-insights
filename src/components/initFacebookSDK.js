@@ -12,9 +12,6 @@ export default function initFacebookSDK() {
       });
 
       window.FB.AppEvents.logPageView(); //non so cosa faccia, documentarsi
-      /*TODO: aggiungere controllo se si è già autorizzati, verrà eseguito prima della pagina di login
-        se si è già autorizzati assegnare subito valori agli useStates, così li controllo nel login
-        e nel caso li rimando subito alla home*/
       resolve();
     };
 
