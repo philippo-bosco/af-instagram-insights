@@ -2,6 +2,9 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import secureLocalStorage from "react-secure-storage";
 
+/**
+ * problema: il logout ha bisogno dell'access token ma non so come passarglielo
+ */
 export default function Navbar({ isAuth, toggleAuth }) {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
