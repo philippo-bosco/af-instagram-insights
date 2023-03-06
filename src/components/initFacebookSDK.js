@@ -8,7 +8,7 @@ export default function initFacebookSDK() {
         appId: FACEBOOK_APP_ID,
         cookie: true,
         xfbml: true,
-        version: "v15.0",
+        version: "v16.0",
       });
 
       window.FB.AppEvents.logPageView(); //non so cosa faccia, documentarsi

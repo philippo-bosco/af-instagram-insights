@@ -19,7 +19,7 @@ export default function App() {
 
   return (
     <div>
-      <Navbar isAuth={isAuthenticated} />
+      <Navbar isAuth={isAuthenticated} toggleAuth={setisAuthenticated} />
       <Routes>
         {/*<Redirect from="/:url*(/+)" to={pathname.slice(0, -1)} />*/}
         <Route
