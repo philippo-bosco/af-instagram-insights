@@ -1,18 +1,22 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import secureLocalStorage from "react-secure-storage";
 
 export default function Login({ isAuth, toggleAuth, AT, ToggleAT }) {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
+  const storedisAuth = secureLocalStorage.getItem("isAuth");
+  const storedAT = secureLocalStorage.getItem("AT");
+  //localstorage
+  /*const storedisAuth = localStorage.getItem("isAuth");
+  const storedAT = localStorage.getItem("AT");*/
 
   useEffect(() => {
-    if (isAuth && AT) {
-      console.log(isAuth);
-      console.log(AT);
+    if (storedisAuth && storedAT) {
       navigate("/");
     }
-  }, [isAuth, AT, navigate]);
+  }, [storedisAuth, storedAT, navigate]);
 
   /*
   FUNZIONAMENTO useEffect --> se viene dichiarato e ci passiamo dentro qualsiasi cosa senza mettere un array finale, 
@@ -41,9 +45,21 @@ export default function Login({ isAuth, toggleAuth, AT, ToggleAT }) {
     if (response.status === "connected") {
       toggleAuth(true);
       ToggleAT(response.authResponse?.accessToken);
+      // Salvataggio nel securelocalStorage
+      secureLocalStorage.setItem("isAuth", true);
+      secureLocalStorage.setItem("AT", response.authResponse?.accessToken);
+      // Salvataggio nel securelocalStorage
+      /*localStorage.setItem("isAuth", true);
+      localStorage.setItem("AT", response.authResponse?.accessToken);*/
     } else {
       toggleAuth(false);
       ToggleAT("");
+      // Salvataggio nel localStorage
+      secureLocalStorage.setItem("isAuth", false);
+      secureLocalStorage.setItem("AT", "");
+      //salvataggio nel localstorage
+      /*localStorage.setItem("isAuth", false);
+      localStorage.setItem("AT", "");*/
     }
   }
 

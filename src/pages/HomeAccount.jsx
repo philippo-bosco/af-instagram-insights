@@ -1,18 +1,34 @@
 import React from "react";
+import { useEffect } from "react";
+import secureLocalStorage from "react-secure-storage";
 /*
 TODO:
 - implementare la home
-- portare l'access token qua dentro
-- eseguire un controllo sull'autenticazione, se aggiorno la pagina qui devo rimanere sulla home non tornare al login
-(guardare privateRoutes)
+- mostrare feed instagram
 */
 
 export default function Home({ isAuth, toggleAuth, AT, ToggleAT }) {
-  return (
+  useEffect(() => {
+    //securelocalstorage
+    const storedIsAuth = secureLocalStorage.getItem("isAuth");
+    const storedAT = secureLocalStorage.getItem("AT");
+    //localstorage
+    /*const storedIsAuth = localStorage.getItem("isAuth");
+    const storedAT = localStorage.getItem("AT");*/
+    if (storedIsAuth) {
+      toggleAuth(true);
+    } else {
+      toggleAuth(false);
+    }
+    ToggleAT(storedAT);
+  }, [toggleAuth, ToggleAT]);
+  return isAuth ? (
     <div className="card mt-5 text-center">
       <div className="card-body">
         <h1>Ciao {AT}</h1>
       </div>
     </div>
+  ) : (
+    <div></div>
   );
 }

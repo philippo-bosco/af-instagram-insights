@@ -1,5 +1,5 @@
 export default function Navbar({ isAuth }) {
-  //TODO: nascondere la navbar quando non si è ancora effettuato il login
+  //TODO: - aggiungere bottone "logout" nella navbar che cancelli l'accesso da TUTTO (localstorage, useState, cookie facebook)"
   return isAuth ? (
     <div>
       <p>questa è la navbar</p>
