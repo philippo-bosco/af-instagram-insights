@@ -11,19 +11,15 @@ export default function Navbar({ isAuth, toggleAuth }) {
 
   async function handleLogout() {
     setIsLoading(true);
-
+    window.FB.api("/me/permissions", "delete", null, () => window.FB.logout());
     // Effettua il logout da Facebook
-    window.FB.logout(response => {
-      console.log(response);
-      // Rimuove le informazioni di accesso dallo storage locale
-      secureLocalStorage.removeItem("isAuth");
-      secureLocalStorage.removeItem("AT");
-      // Aggiorna lo stato dell'autenticazione
-      toggleAuth(false);
-      setIsLoading(false);
-      // Torna alla pagina di login
-      navigate("/login");
-    });
+    secureLocalStorage.removeItem("isAuth");
+    secureLocalStorage.removeItem("AT");
+    // Aggiorna lo stato dell'autenticazione
+    toggleAuth(false);
+    setIsLoading(false);
+    // Torna alla pagina di login
+    navigate("/login");
   }
 
   return isAuth ? (
