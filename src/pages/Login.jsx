@@ -3,6 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import secureLocalStorage from "react-secure-storage";
 
+//import custom
+import "../styles/login.css";
+
 export default function Login({ isAuth, toggleAuth, AT, ToggleAT }) {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);

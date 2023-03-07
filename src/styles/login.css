@@ -1,0 +1,74 @@
+.gradient-custom-2 {
+  /* fallback for old browsers */
+  background: #fccb90;
+
+  /* Chrome 10-25, Safari 5.1-6 */
+  background: -webkit-linear-gradient(
+    to right,
+    #ee7724,
+    #d8363a,
+    #dd3675,
+    #b44593
+  );
+
+  /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  background: linear-gradient(to right, #ee7724, #d8363a, #dd3675, #b44593);
+}
+
+@media (min-width: 768px) {
+  .gradient-form {
+    height: 100vh !important;
+  }
+}
+@media (min-width: 769px) {
+  .gradient-custom-2 {
+    border-top-right-radius: 0.3rem;
+    border-bottom-right-radius: 0.3rem;
+  }
+}
+
+.insta-icon {
+  --icon-size: 128px;
+  position: sticky;
+  align-content: center;
+  width: var(--icon-size);
+  height: var(--icon-size);
+  background: radial-gradient(
+    circle at 33% 100%,
+    #f3d373 4%,
+    #f15245 30%,
+    #d92e7f 62%,
+    #9b36b7 85%,
+    #515ecf
+  );
+  border-radius: 25%;
+}
+.insta-icon > span {
+  width: 12px;
+  height: 12px;
+  background: #fff;
+  display: block;
+  border-radius: 50%;
+  position: absolute;
+  right: 35px;
+  top: 35px;
+}
+.insta-icon:after,
+.insta-icon:before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: calc(var(--icon-size) / 1.5);
+  height: calc(var(--icon-size) / 1.5);
+  border: calc(var(--icon-size) / 15) solid #fff;
+  transform: translate(-50%, -50%);
+}
+.insta-icon:after {
+  width: calc(var(--icon-size) / 3);
+  height: calc(var(--icon-size) / 3);
+  border-radius: 50%;
+}
+.insta-icon:before {
+  border-radius: 25%;
+}
