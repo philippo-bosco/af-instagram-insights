@@ -2,24 +2,34 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import secureLocalStorage from "react-secure-storage";
 
-/**
- * problema: il logout ha bisogno dell'access token ma non so come passarglielo
- */
 export default function Navbar({ isAuth, toggleAuth }) {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
 
   async function handleLogout() {
     setIsLoading(true);
-    window.FB.api("/me/permissions", "delete", null, () => window.FB.logout());
-    // Effettua il logout da Facebook
-    secureLocalStorage.removeItem("isAuth");
-    secureLocalStorage.removeItem("AT");
-    // Aggiorna lo stato dell'autenticazione
-    toggleAuth(false);
-    setIsLoading(false);
-    // Torna alla pagina di login
-    navigate("/login");
+
+    // Controlla se l'access token esiste
+    const accessToken = secureLocalStorage.getItem("AT");
+    if (accessToken) {
+      window.FB.getLoginStatus(function (response) {
+        const tokenStatus = response.authResponse?.accessToken;
+        if (response.status === "connected" && tokenStatus === accessToken) {
+          // Effettua il logout da Facebook solo se l'access token esiste
+          window.FB.api("/me/permissions", "delete", null, () => {
+            window.FB.logout();
+            // Rimuovi i dati di autenticazione dalla cache del browser
+            secureLocalStorage.removeItem("isAuth");
+            secureLocalStorage.removeItem("AT");
+            // Aggiorna lo stato dell'autenticazione
+            toggleAuth(false);
+            setIsLoading(false);
+            // Torna alla pagina di login
+            navigate("/login");
+          });
+        }
+      });
+    }
   }
 
   return isAuth ? (
