@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import secureLocalStorage from "react-secure-storage";
 
-export default function Navbar({ isAuth, toggleAuth }) {
+export default function Navigationbar({ isAuth, toggleAuth }) {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
 

@@ -8,7 +8,7 @@ import Login from "./pages/Login";
 import { Route, Routes } from "react-router-dom";
 import PrivateRoutes from "./components/PrivateRoutes";
 //import PageNotFound from "./pages/PageNotFound";
-import Navbar from "./components/NavBar";
+import NavigationBar from "./components/NavBar";
 
 export default function App() {
   const [isAuthenticated, setisAuthenticated] = useState(null);
@@ -19,7 +19,7 @@ export default function App() {
 
   return (
     <div>
-      <Navbar isAuth={isAuthenticated} toggleAuth={setisAuthenticated} />
+      <NavigationBar isAuth={isAuthenticated} toggleAuth={setisAuthenticated} />
       <Routes>
         {/*<Redirect from="/:url*(/+)" to={pathname.slice(0, -1)} />*/}
         <Route
