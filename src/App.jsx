@@ -1,45 +1,61 @@
-/**
- * TODO
- * - sistemare privateRoute (non so come si fa a reindirizzare con i dati che ho)
- * - sistemare Login Page perchè annulla la form (probabile errore di routing)
- * - sistemare funzioni di cattura account Instagram in AccountService.js
- */
-
-//import React libraries
 import React from "react";
-import { Route, Switch, Redirect, useLocation } from "react-router-dom";
+import { useState } from "react";
 
-//import customs
+//import custom
 import "./App.css";
-import PrivateRoute from "./components/PrivateRoute";
+import Home from "./pages/HomeAccount";
+import Login from "./pages/Login";
+import { Route, Routes } from "react-router-dom";
+import PrivateRoutes from "./components/PrivateRoutes";
+//import PageNotFound from "./pages/PageNotFound";
+import NavigationBar from "./components/NavBar";
 
-import Login from "pages/Login";
-import { Home } from "./pages/HomeAccount";
-import { Nav } from "./components/Nav";
+export default function App() {
+  const [isAuthenticated, setisAuthenticated] = useState(null);
+  const [FBaccessTOKEN, setFBaccessToken] = useState("");
+  //const pathname = useLocation().pathname || "";
 
-function App() {
-  const pathname = useLocation().pathname || "";
+  //non cè ancora un controllo se il tipo è gia stato autenticato o no
+
   return (
     <div>
-      {/*<Nav />*/}
-      <div className="container pt-4">
-        <Switch>
-          <Redirect from="/:url*(/+)" to={pathname.slice(0, -1)} />
-          <Route path="/login" component={Login} />
-          <PrivateRoute exact path="/" component={Home} />
-          <Redirect from="*" to="/" />
-        </Switch>
-      </div>
+      <NavigationBar isAuth={isAuthenticated} toggleAuth={setisAuthenticated} />
+      <Routes>
+        {/*<Redirect from="/:url*(/+)" to={pathname.slice(0, -1)} />*/}
+        <Route
+          path="/login"
+          element={
+            <Login
+              isAuth={isAuthenticated}
+              toggleAuth={setisAuthenticated}
+              AT={FBaccessTOKEN}
+              ToggleAT={setFBaccessToken}
+            />
+          }
+        />
+        <Route
+          element={
+            <PrivateRoutes
+              isAuth={isAuthenticated}
+              toggleAuth={setisAuthenticated}
+            />
+          }
+        >
+          <Route
+            path="/"
+            element={
+              <Home
+                isAuth={isAuthenticated}
+                toggleAuth={setisAuthenticated}
+                AT={FBaccessTOKEN}
+                ToggleAT={setFBaccessToken}
+              />
+            }
+            exact
+          />
+        </Route>
+        {/*<Route path="*" element={<PageNotFound />} />*/}
+      </Routes>
     </div>
   );
 }
-
-export default App;
-
-/**
- * ACCOUNTPAGE {structure}:
- * |
- * |-> NAVBAR (ROUTE):
- *      |-> profile
- *      |-> insights
- */

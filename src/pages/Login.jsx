@@ -1,20 +1,62 @@
-import React, { useEffect } from "react";
-import { AccountService } from "../components/AccountService";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import secureLocalStorage from "react-secure-storage";
 
-export default function Login({ history }) {
+//import custom
+import "../styles/login.css";
+
+export default function Login({ isAuth, toggleAuth, AT, ToggleAT }) {
+  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
+  const storedisAuth = secureLocalStorage.getItem("isAuth");
+  const storedAT = secureLocalStorage.getItem("AT");
+  //localstorage
+  /*const storedisAuth = localStorage.getItem("isAuth");
+  const storedAT = localStorage.getItem("AT");*/
+
   useEffect(() => {
-    window.FB.getLoginStatus(function (response) {
-      statusChangeCallback(response);
-    });
-  });
+    if (storedisAuth && storedAT) {
+      navigate("/");
+    }
+  }, [storedisAuth, storedAT, navigate]);
 
-  // Controllo se l'utente è già stato autenticato
-  //duplicato di AccountService.statusChangeCallback WARNING
-  function statusChangeCallback(response) {
-    console.log("statusChangeCallback");
-    console.log(response);
+  /*
+  FUNZIONAMENTO useEffect --> se viene dichiarato e ci passiamo dentro qualsiasi cosa senza mettere un array finale, 
+  useEffect verrà eseguito ad ogni render.
+  Se viene dichiarato alla fine, useEffect verrà eseguito solo al primo render.
+  Props e State dichiarati nell'array significa che useEffect verrà eseguto ogni volta che il loro stato verrà cambiato. 
+  */
+
+  async function loginToFB() {
+    setIsLoading(true);
+
+    window.FB.login(
+      response => {
+        console.log(response);
+        statusChangeCallback(response);
+      },
+      {
+        scope: "instagram_basic,pages_show_list, email",
+      }
+    );
+  }
+
+  async function statusChangeCallback(response) {
+    setIsLoading(false);
+
     if (response.status === "connected") {
-      history.push("/");
+      toggleAuth(true);
+      ToggleAT(response.authResponse?.accessToken);
+      // Salvataggio nel securelocalStorage
+      secureLocalStorage.setItem("isAuth", true);
+      secureLocalStorage.setItem("AT", response.authResponse?.accessToken);
+    } else {
+      toggleAuth(false);
+      ToggleAT("");
+      // Salvataggio nel localStorage
+      secureLocalStorage.setItem("isAuth", false);
+      secureLocalStorage.setItem("AT", "");
     }
   }
 
@@ -44,8 +86,16 @@ export default function Login({ history }) {
                         <div className="card-body">
                           <button
                             className="btn btn-facebook"
-                            onClick={AccountService.Login}
+                            onClick={loginToFB}
+                            disabled={isLoading}
                           >
+                            {isLoading && (
+                              <span
+                                className="spinner-border spinner-border-sm mr-2"
+                                role="status"
+                                aria-hidden="true"
+                              ></span>
+                            )}
                             <i className="fa fa-facebook mr-1"></i>
                             Login with Facebook
                           </button>

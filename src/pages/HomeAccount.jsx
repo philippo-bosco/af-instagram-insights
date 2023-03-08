@@ -1,14 +1,48 @@
 import React from "react";
-/*
-import { useState, useEffect } from "react";
-import { Link, renderMatches } from "react-router-dom";
+import { useEffect, useState } from "react";
 
-import { AccountService } from "../components/AccountService";
+import secureLocalStorage from "react-secure-storage";
+import LoadInstagramAccount from "../components/AccountLoad";
+/*
+TODO:
+- implementare la home
+- mostrare feed instagram
 */
-export function Home() {
-  return (
-    <div>
-      <h1>CIAOOO</h1>
+
+export default function Home({ isAuth, toggleAuth, AT, ToggleAT }) {
+  const [isLoadingAccount, setIsLoadingAccount] = useState(false);
+  const storedIgID = secureLocalStorage.getItem("IgID");
+
+  useEffect(() => {
+    const storedIsAuth = secureLocalStorage.getItem("isAuth");
+    const storedAT = secureLocalStorage.getItem("AT");
+
+    if (storedIsAuth) {
+      toggleAuth(true);
+      setIsLoadingAccount(true); // impostare lo stato di caricamento a true
+      LoadInstagramAccount({ authResponse: { accessToken: storedAT } }).then(
+        () => {
+          setIsLoadingAccount(false); // impostare lo stato di caricamento a false quando la chiamata è completata
+        }
+      );
+    } else {
+      toggleAuth(false);
+    }
+    ToggleAT(storedAT);
+  }, [toggleAuth, ToggleAT]);
+
+  //render
+  return isAuth ? (
+    <div className="card mt-5 text-center">
+      <div className="card-body">
+        {isLoadingAccount ? (
+          <p>Caricamento in corso...</p>
+        ) : (
+          <h1>Ciao {storedIgID}</h1>
+        )}
+      </div>
     </div>
+  ) : (
+    <div></div>
   );
 }

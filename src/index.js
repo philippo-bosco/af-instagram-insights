@@ -1,21 +1,20 @@
-//import libraries
 import React from "react";
-import { Router } from "react-router-dom";
-import { render } from "react-dom";
+import ReactDOM from "react-dom/client";
+import { BrowserRouter } from "react-router-dom";
 
 //import customs
-import "./index.css";
+import initFacebookSDK from "./components/initFacebookSDK";
 import App from "./App";
-import initFacebookSDK from "./helpers/initFacebookSDK";
-import { history } from "./helpers";
+import "./index.css";
 
 initFacebookSDK().then(startApp);
-
+const root = ReactDOM.createRoot(document.getElementById("root"));
 function startApp() {
-  render(
-    <Router history={history}>
-      <App />
-    </Router>,
-    document.getElementById("root")
+  root.render(
+    <React.StrictMode>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </React.StrictMode>
   );
 }
