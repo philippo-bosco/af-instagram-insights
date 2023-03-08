@@ -51,18 +51,12 @@ export default function Login({ isAuth, toggleAuth, AT, ToggleAT }) {
       // Salvataggio nel securelocalStorage
       secureLocalStorage.setItem("isAuth", true);
       secureLocalStorage.setItem("AT", response.authResponse?.accessToken);
-      // Salvataggio nel securelocalStorage
-      /*localStorage.setItem("isAuth", true);
-      localStorage.setItem("AT", response.authResponse?.accessToken);*/
     } else {
       toggleAuth(false);
       ToggleAT("");
       // Salvataggio nel localStorage
       secureLocalStorage.setItem("isAuth", false);
       secureLocalStorage.setItem("AT", "");
-      //salvataggio nel localstorage
-      /*localStorage.setItem("isAuth", false);
-      localStorage.setItem("AT", "");*/
     }
   }
 

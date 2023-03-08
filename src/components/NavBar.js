@@ -21,6 +21,7 @@ export default function Navbar({ isAuth, toggleAuth }) {
             // Rimuovi i dati di autenticazione dalla cache del browser
             secureLocalStorage.removeItem("isAuth");
             secureLocalStorage.removeItem("AT");
+            secureLocalStorage.removeItem("IgID");
             // Aggiorna lo stato dell'autenticazione
             toggleAuth(false);
             setIsLoading(false);
