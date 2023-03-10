@@ -13,9 +13,6 @@ import NavigationBar from "./components/NavBar";
 export default function App() {
   const [isAuthenticated, setisAuthenticated] = useState(null);
   const [FBaccessTOKEN, setFBaccessToken] = useState("");
-  //const pathname = useLocation().pathname || "";
-
-  //non cè ancora un controllo se il tipo è gia stato autenticato o no
 
   return (
     <div>
