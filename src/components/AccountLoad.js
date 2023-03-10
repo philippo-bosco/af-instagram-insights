@@ -8,12 +8,6 @@ Queste funzioni devono essere caricate in modo asincrono e devono essere chiamat
 le funzioni in questione sono: getFacebookPages, getInstagramAccountId
 l'obiettivo di questo file è quello di scrivere nel secure-local-storage l'ig-user-id derivante da queste
 funzioni ed utilizzarlo insieme all'accessToken per effettuare tutte le richieste che vogliamo
-
-TODO: 
-- portare qui le funzioni
-- prendere le informazioni che servono (accessToken & isAuth)
-- esportare correttamente le funzioni
-- salvare l'ig-user-id nel secure-local-storage
 */
 
 const getFacebookPages = responseAT => {

@@ -3,6 +3,15 @@ import { useNavigate } from "react-router-dom";
 import secureLocalStorage from "react-secure-storage";
 import axios from "axios";
 
+/*
+ * TODO alefuma:
+ * - sistemare frontend navbar (i dati sono salvati nello useState userData)
+ *        Se hai bisogno di ulteriori fields da mostrare, guarda questo link e aggiungili alla richiesta axios:
+ *        https://developers.facebook.com/docs/instagram-api/reference/ig-user#fields
+ * - se rimpicciolisco la finestra il pulsante logout sparisce ;(   (dagli un occhio forse ho fatto io una cazzata con css)
+ * - controllare visualizzazione mobile e nel caso aggiustare
+ */
+
 export default function Navigationbar({ isAuth, toggleAuth }) {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);

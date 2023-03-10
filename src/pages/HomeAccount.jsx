@@ -1,12 +1,11 @@
 import React from "react";
 import { useEffect } from "react";
-
 import secureLocalStorage from "react-secure-storage";
-//import LoadInstagramAccount from "../components/AccountLoad";
+
 /*
-TODO:
-- implementare la home
+TODO phil:
 - mostrare feed instagram
+- creare un componente per ogni azione che dobbiamo fare "feed Component", "post Component"
 */
 
 export default function Home({ isAuth, toggleAuth, AT, ToggleAT }) {

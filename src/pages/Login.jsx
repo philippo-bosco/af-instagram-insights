@@ -7,6 +7,13 @@ import secureLocalStorage from "react-secure-storage";
 import "../styles/login.css";
 import LoadInstagramAccount from "../components/AccountLoad";
 
+/*
+ * TODO alefuma:
+ * - rendere il bottone di facebook login carino
+ * - sistemare locazione logo instagram (mettere in posizione più centrale e separata dal testo se riesci)
+ * - controllare visualizzazione mobile e nel caso aggiustare
+ */
+
 export default function Login({ isAuth, toggleAuth, AT, ToggleAT }) {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
