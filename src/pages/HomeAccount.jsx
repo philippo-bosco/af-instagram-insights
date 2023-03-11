@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import { useEffect } from "react";
 import secureLocalStorage from "react-secure-storage";
+import axios from "axios";
 
 /*
 TODO phil:
@@ -8,8 +9,14 @@ TODO phil:
 - creare un componente per ogni azione che dobbiamo fare "feed Component", "post Component"
 */
 
+/*
+URL richiesta axios:
+curl -i -X GET \
+ "https://graph.facebook.com/v16.0/17841401468148973/media?fields=id%2Ccaption%2Ccomments_count%2Clike_count%2Cmedia_url%2Cowner%2Cpermalink%2Cmedia_type%2Cusername%2Cchildren%7Bmedia_type%2Cmedia_url%2Cowner%2Cthumbnail_url%7D%2Ccomments%7Btext%7D%2Ctimestamp&access_token=*/
+
 export default function Home({ isAuth, toggleAuth, AT, ToggleAT }) {
   const storedIgID = secureLocalStorage.getItem("IgID");
+  const [userFeed, setUserFeed] = useState();
 
   useEffect(() => {
     const storedIsAuth = secureLocalStorage.getItem("isAuth");
@@ -21,13 +28,60 @@ export default function Home({ isAuth, toggleAuth, AT, ToggleAT }) {
       toggleAuth(false);
     }
     ToggleAT(storedAT);
-  }, [toggleAuth, ToggleAT]);
+    async function fetchFeed() {
+      if (AT && storedIgID) {
+        const response = await axios.get(
+          `https://graph.facebook.com/v16.0/${storedIgID}/media?fields=id%2Ccaption%2Ccomments_count%2Clike_count%2Cmedia_url%2Cowner%2Cpermalink%2Cmedia_type%2Cusername%2Cchildren%7Bmedia_type%2Cmedia_url%2Cowner%2Cthumbnail_url%7D%2Ccomments%7Btext%7D%2Ctimestamp&access_token=${AT}`
+        );
+        setUserFeed(response.data);
+      }
+    }
+    fetchFeed();
+  }, [toggleAuth, ToggleAT, AT, storedIgID]);
 
   //render
   return isAuth ? (
     <div className="card mt-5 text-center">
       <div className="card-body">
-        <h1>Ciao {storedIgID}</h1>
+        {userFeed && (
+          <div>
+            <h1>Ciao {storedIgID}</h1>
+            {userFeed.data.map(post => (
+              <div key={post.id}>
+                {post.media_type === "VIDEO" ? (
+                  <video controls>
+                    <source src={post.media_url} type="video/mp4" />
+                  </video>
+                ) : (
+                  <img src={post.media_url} alt={post.caption} />
+                )}
+                <p>{post.caption}</p>
+                {post.children && post.children.data.length > 0 && (
+                  <div>
+                    {post.children.data.map(childPost => (
+                      <div key={childPost.id + 1}>
+                        {childPost.media_type === "VIDEO" ? (
+                          <video controls>
+                            <source
+                              src={childPost.media_url}
+                              type="video/mp4"
+                            />
+                          </video>
+                        ) : (
+                          <img
+                            src={childPost.media_url}
+                            alt={childPost.caption}
+                          />
+                        )}
+                        <p>{childPost.caption}</p>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   ) : (

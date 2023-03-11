@@ -23,7 +23,7 @@ export default function Navigationbar({ isAuth, toggleAuth }) {
     async function fetchData() {
       if (storedAT && storedIgID) {
         const response = await axios.get(
-          `https://graph.facebook.com/v13.0/${storedIgID}?fields=followers_count,follows_count,media_count,name,profile_picture_url,username&access_token=${storedAT}`
+          `https://graph.facebook.com/v16.0/${storedIgID}?fields=followers_count,follows_count,media_count,name,profile_picture_url,username&access_token=${storedAT}`
         );
         setUserData(response.data);
       }
@@ -53,6 +53,17 @@ export default function Navigationbar({ isAuth, toggleAuth }) {
             // Torna alla pagina di login
             navigate("/login");
           });
+        } else {
+          window.FB.logout();
+          // Rimuovi i dati di autenticazione dalla cache del browser
+          secureLocalStorage.removeItem("isAuth");
+          secureLocalStorage.removeItem("AT");
+          secureLocalStorage.removeItem("IgID");
+          // Aggiorna lo stato dell'autenticazione
+          toggleAuth(false);
+          setIsLoading(false);
+          // Torna alla pagina di login
+          navigate("/login");
         }
       });
     }
