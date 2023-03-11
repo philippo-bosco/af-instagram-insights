@@ -3,17 +3,6 @@ import { useEffect } from "react";
 import secureLocalStorage from "react-secure-storage";
 import axios from "axios";
 
-/*
-TODO phil:
-- mostrare feed instagram
-- creare un componente per ogni azione che dobbiamo fare "feed Component", "post Component"
-*/
-
-/*
-URL richiesta axios:
-curl -i -X GET \
- "https://graph.facebook.com/v16.0/17841401468148973/media?fields=id%2Ccaption%2Ccomments_count%2Clike_count%2Cmedia_url%2Cowner%2Cpermalink%2Cmedia_type%2Cusername%2Cchildren%7Bmedia_type%2Cmedia_url%2Cowner%2Cthumbnail_url%7D%2Ccomments%7Btext%7D%2Ctimestamp&access_token=*/
-
 export default function Home({ isAuth, toggleAuth, AT, ToggleAT }) {
   const storedIgID = secureLocalStorage.getItem("IgID");
   const [userFeed, setUserFeed] = useState();
