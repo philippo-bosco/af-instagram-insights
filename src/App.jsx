@@ -7,7 +7,12 @@
 
 //import React libraries
 import React from "react";
+<<<<<<< Updated upstream
 import { Route, Routes, Navigate, useLocation } from "react-router-dom";
+=======
+import { useState } from "react";
+import Grafici from "./pages/grafici.jsx"
+>>>>>>> Stashed changes
 
 //import customs
 import "./App.css";
@@ -25,6 +30,7 @@ function App() {
   return (
     <>
     <div>
+<<<<<<< Updated upstream
       <Navigation
         src={user}
         nome="Gesualdo"
@@ -59,6 +65,52 @@ function App() {
   <Navigate from="*" to="/" replace={true}/> */}
   
       </div>
+=======
+      <NavigationBar isAuth={isAuthenticated} toggleAuth={setisAuthenticated} />
+      <Routes>
+        {/*<Redirect from="/:url*(/+)" to={pathname.slice(0, -1)} />*/}
+        <Route
+          path="/login"
+          element={
+            <Login
+              isAuth={isAuthenticated}
+              toggleAuth={setisAuthenticated}
+              AT={FBaccessTOKEN}
+              ToggleAT={setFBaccessToken}
+            />
+          }
+        />
+        <Route
+          element={
+            <PrivateRoutes
+              isAuth={isAuthenticated}
+              toggleAuth={setisAuthenticated}
+            />
+          }
+        >
+          <Route
+            path="/"
+            element={
+              <Home
+                isAuth={isAuthenticated}
+                toggleAuth={setisAuthenticated}
+                AT={FBaccessTOKEN}
+                ToggleAT={setFBaccessToken}
+              />
+            }
+            exact
+          />
+        </Route>
+        {/*<Route path="*" element={<PageNotFound />} />*/}
+      </Routes>
+      <Routes>
+          <Route path="/stats" element={<Grafici></Grafici>}/>
+          <Route exact path="/home" element={<Home>
+                                             </Home>} >
+
+          </Route>
+        </Routes>
+>>>>>>> Stashed changes
     </div>
     </>
   );
