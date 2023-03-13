@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import secureLocalStorage from "react-secure-storage";
 import axios from "axios";
+import Navigation from "./Navigation";
 
 /*
  * TODO alefuma:
@@ -70,64 +71,31 @@ export default function Navigationbar({ isAuth, toggleAuth }) {
   }
 
   return isAuth ? (
-    <nav className="navbar navbar-expand-lg navbar-light bg-light">
-      <a className="navbar-brand" href="/">
-        My App
-      </a>
-      <button
-        className="navbar-toggler"
-        type="button"
-        data-toggle="collapse"
-        data-target="#navbarNav"
-        aria-controls="navbarNav"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
-        <span className="navbar-toggler-icon"></span>
-      </button>
-      <div className="collapse navbar-collapse" id="navbarNav">
-        <ul className="navbar-nav ml-auto">
-          {userData && (
-            <li className="nav-item">
-              <div className="d-flex align-items-center">
-                <img
-                  src={userData.profile_picture_url}
-                  alt="profile"
-                  width="40"
-                  height="40"
-                  className="rounded-circle mr-2"
-                />
-                <div>
-                  <div>{userData.username}</div>
-                  <div className="small text-muted">
-                    {userData.followers_count} followers |{" "}
-                    {userData.follows_count} following | {userData.media_count}{" "}
-                    posts
-                  </div>
-                </div>
-              </div>
-            </li>
+    <nav>
+      {userData && (
+        <Navigation
+          src={userData.profile_picture_url}
+          nome={userData.username}
+          following={userData.follows_count}
+          followers={userData.followers_count}
+        />
+      )}
+      {isAuth && (
+        <button
+          className="btn btn-danger"
+          onClick={handleLogout}
+          disabled={isLoading}
+        >
+          {isLoading && (
+            <span
+              className="spinner-border spinner-border-sm mr-2"
+              role="status"
+              aria-hidden="true"
+            ></span>
           )}
-          {isAuth && (
-            <li className="nav-item">
-              <button
-                className="btn btn-danger"
-                onClick={handleLogout}
-                disabled={isLoading}
-              >
-                {isLoading && (
-                  <span
-                    className="spinner-border spinner-border-sm mr-2"
-                    role="status"
-                    aria-hidden="true"
-                  ></span>
-                )}
-                Logout
-              </button>
-            </li>
-          )}
-        </ul>
-      </div>
+          Logout
+        </button>
+      )}
     </nav>
   ) : (
     <div></div>
