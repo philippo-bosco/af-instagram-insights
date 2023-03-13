@@ -10,6 +10,13 @@ import PrivateRoutes from "./components/PrivateRoutes";
 //import PageNotFound from "./pages/PageNotFound";
 import NavigationBar from "./components/NavBar";
 
+/*
+ * TODO phil:
+ * - aggiungere pagina /Insights
+ * - aggiungere bottoni navbar (home + insights)
+ * - aggiungere controlli PrivateRoutes /Insights
+ */
+
 export default function App() {
   const [isAuthenticated, setisAuthenticated] = useState(null);
   const [FBaccessTOKEN, setFBaccessToken] = useState("");
