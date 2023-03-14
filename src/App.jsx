@@ -9,6 +9,7 @@ import { Route, Routes } from "react-router-dom";
 import PrivateRoutes from "./components/PrivateRoutes";
 //import PageNotFound from "./pages/PageNotFound";
 import NavigationBar from "./components/NavBar";
+import HomeInsights from "./pages/HomeInsights";
 
 /*
  * TODO phil:
@@ -49,6 +50,18 @@ export default function App() {
             path="/"
             element={
               <Home
+                isAuth={isAuthenticated}
+                toggleAuth={setisAuthenticated}
+                AT={FBaccessTOKEN}
+                ToggleAT={setFBaccessToken}
+              />
+            }
+            exact
+          />
+          <Route
+            path="/stats"
+            element={
+              <HomeInsights
                 isAuth={isAuthenticated}
                 toggleAuth={setisAuthenticated}
                 AT={FBaccessTOKEN}

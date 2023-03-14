@@ -22,7 +22,7 @@ function Navigation(props) {
       <ButtonGroup aria-label="Basic example" class="btngroup">
         <Button disabled>seguiti {props.following}</Button>
         <Button disabled>follower {props.followers}</Button>
-        <Link to="/home">
+        <Link to="/">
           {" "}
           <Button class="button">Profilo</Button>
         </Link>

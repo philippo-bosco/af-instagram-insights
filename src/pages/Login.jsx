@@ -43,7 +43,8 @@ export default function Login({ isAuth, toggleAuth, AT, ToggleAT }) {
         statusChangeCallback(response);
       },
       {
-        scope: "instagram_basic,pages_show_list, pages_read_engagement",
+        scope:
+          "instagram_basic,pages_show_list,pages_read_engagement,instagram_manage_insights",
       }
     );
   }
