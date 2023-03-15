@@ -1,21 +1,73 @@
-import React, { useEffect } from "react";
-import { AccountService } from "../components/AccountService";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import secureLocalStorage from "react-secure-storage";
 
-export default function Login({ history }) {
+//import custom
+import "../styles/login.css";
+import LoadInstagramAccount from "../components/AccountLoad";
+
+/*
+ * TODO alefuma:
+ * - rendere il bottone di facebook login carino
+ * - sistemare locazione logo instagram (mettere in posizione più centrale e separata dal testo se riesci)
+ * - controllare visualizzazione mobile e nel caso aggiustare
+ */
+
+export default function Login({ isAuth, toggleAuth, AT, ToggleAT }) {
+  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
+  const storedisAuth = secureLocalStorage.getItem("isAuth");
+  const storedAT = secureLocalStorage.getItem("AT");
+  const storedIgID = secureLocalStorage.getItem("IgID");
+
   useEffect(() => {
-    window.FB.getLoginStatus(function (response) {
-      statusChangeCallback(response);
-    });
-  });
-
-  // Controllo se l'utente è già stato autenticato
-  //duplicato di AccountService.statusChangeCallback WARNING
-  function statusChangeCallback(response) {
-    console.log("statusChangeCallback");
-    console.log(response);
-    if (response.status === "connected") {
-      history.push("/");
+    if (storedisAuth && storedAT && storedIgID) {
+      navigate("/");
     }
+  }, [storedisAuth, storedAT, storedIgID, navigate]);
+
+  /*
+  FUNZIONAMENTO useEffect --> se viene dichiarato e ci passiamo dentro qualsiasi cosa senza mettere un array finale, 
+  useEffect verrà eseguito ad ogni render.
+  Se viene dichiarato alla fine, useEffect verrà eseguito solo al primo render.
+  Props e State dichiarati nell'array significa che useEffect verrà eseguto ogni volta che il loro stato verrà cambiato. 
+  */
+
+  async function loginToFB() {
+    setIsLoading(true);
+
+    window.FB.login(
+      response => {
+        console.log(response);
+        statusChangeCallback(response);
+      },
+      {
+        scope: "instagram_basic,pages_show_list, pages_read_engagement",
+      }
+    );
+  }
+
+  async function statusChangeCallback(response) {
+    //setIsLoading(false);
+
+    if (response.status === "connected") {
+      toggleAuth(true);
+      ToggleAT(response.authResponse?.accessToken);
+      // Salvataggio nel securelocalStorage
+      secureLocalStorage.setItem("isAuth", true);
+      secureLocalStorage.setItem("AT", response.authResponse?.accessToken);
+
+      await LoadInstagramAccount(response);
+      console.log(secureLocalStorage.getItem("IgID"));
+    } else {
+      toggleAuth(false);
+      ToggleAT("");
+      // Salvataggio nel securelocalStorage
+      secureLocalStorage.setItem("isAuth", false);
+      secureLocalStorage.setItem("AT", "");
+    }
+    setIsLoading(false);
   }
 
   return (
@@ -44,8 +96,16 @@ export default function Login({ history }) {
                         <div className="card-body">
                           <button
                             className="btn btn-facebook"
-                            onClick={AccountService.Login}
+                            onClick={loginToFB}
+                            disabled={isLoading}
                           >
+                            {isLoading && (
+                              <span
+                                className="spinner-border spinner-border-sm mr-2"
+                                role="status"
+                                aria-hidden="true"
+                              ></span>
+                            )}
                             <i className="fa fa-facebook mr-1"></i>
                             Login with Facebook
                           </button>

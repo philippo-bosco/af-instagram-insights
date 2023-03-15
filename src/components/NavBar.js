@@ -2,7 +2,11 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import secureLocalStorage from "react-secure-storage";
 import axios from "axios";
-import Navigation from "./Navigation";
+import ButtonGroup from 'react-bootstrap/ButtonGroup';
+import { Link } from 'react-router-dom';
+import Container from 'react-bootstrap/Container';
+import Navbar from 'react-bootstrap/Navbar';
+import Button from 'react-bootstrap/Button';
 
 /*
  * TODO alefuma:
@@ -73,17 +77,20 @@ export default function Navigationbar({ isAuth, toggleAuth }) {
   return isAuth ? (
     <nav >
           {userData && (
-            <Navigation
-              src={userData.profile_picture_url}
-              nome={userData.username}
-              following={userData.follows_count}
-              followers={userData.followers_count}
-            />
-          )}
-          {isAuth && (
-            
-              <button
-                className="btn btn-danger"
+            <>
+                 <Container>
+                  <div classname="container-fluid navbar-brand">
+                   
+                   <img
+                     alt="immagine"
+                     src={userData.profile_picture_url}
+                     width="50"
+                     height="50"
+                     className="d-inline-block align-top rounded-circle margin-right"
+                   />            
+                 Welcome {userData.name}
+                 <Button
+                className="button"
                 onClick={handleLogout}
                 disabled={isLoading}
               >
@@ -94,10 +101,25 @@ export default function Navigationbar({ isAuth, toggleAuth }) {
                     aria-hidden="true"
                   ></span>
                 )}
-                Logout
-              </button>
-             
+                Logout    
+              </Button>
+               
+             <Button disabled    >post {userData.media_count}</Button>
+            <Button disabled    >seguiti {userData.follows_count}</Button>
+            <Button disabled    >follower {userData.followers_count}</Button>  
+            </div>
+            </Container>
+            
+             </>
           )}
+        
+     
+       <div className="d-flex justify-content-center">
+        <Link to="/home"> <Button  class="button"  >Profilo</Button></Link>
+             <Link to="/stats"> <Button class ="button"  >Insights</Button></Link>
+             </div>
+       
+       
     </nav>
   ) : (
     <div></div>

@@ -6,7 +6,9 @@ import Card from 'react-bootstrap/Card';
 function Post(props) {
   return (
     <Card  style={{ width: '18rem' }} class="HoverDiv fadein" >
-      <Card.Img variant="top" src={props.src}  />
+      {props.video===true? ( <video controls>
+                    <source src={props.src} type="video/mp4" />
+      </video>):(  <Card.Img variant="top" src={props.src}  />)}
       <Card.Body>
         <Card.Text align = "center">
           {props.didascalia}

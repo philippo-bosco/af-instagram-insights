@@ -1,22 +1,9 @@
-<<<<<<< Updated upstream
-import React from "react";
-import Post from "../components/post"
-/*
-import { useState, useEffect } from "react";
-import { Link, renderMatches } from "react-router-dom";
-
-import { AccountService } from "../components/AccountService";
-*/
-export default function Home(props) {
-  return (
-    <div>
-      <Post src={props.link} didascalia={props.didascalia}/>
-=======
 import React, { useState } from "react";
 import { useEffect } from "react";
 import secureLocalStorage from "react-secure-storage";
 import axios from "axios";
-import Post from "../components/Post.jsx"
+import Post from "../components/post";
+import Carosello from "../components/carusel";
 export default function Home({ isAuth, toggleAuth, AT, ToggleAT }) {
   const storedIgID = secureLocalStorage.getItem("IgID");
   const [userFeed, setUserFeed] = useState();
@@ -52,41 +39,38 @@ export default function Home({ isAuth, toggleAuth, AT, ToggleAT }) {
             {userFeed.data.map(post => (
               <div key={post.id}>
                 {post.media_type === "VIDEO" ? (
-                  <video controls>
-                    <source src={post.media_url} type="video/mp4" />
-                  </video>
+                  <Post
+                  video={true}
+                  src={post.media_url}
+                  didascalia={post.caption}
+                />
                 ) : (
-                  <img src={post.media_url} alt={post.caption} />
-                )}
-                <p>{post.caption}</p>
-                {post.children && post.children.data.length > 0 && (
-                  <div>
-                    {post.children.data.map(childPost => (
-                      <div key={childPost.id + 1}>
-                        {childPost.media_type === "VIDEO" ? (
-                          <video controls>
-                            <source
-                              src={childPost.media_url}
-                              type="video/mp4"
+                  post.media_type === "CAROUSEL_ALBUM" ? (
+                    <div>
+                      {console.log(post)}
+                      <div key={post.children.data + 1}> 
+                           <Carosello
+                           src={post.children.data}
+                           
                             />
-                          </video>
-                        ) : (
-                          <Post>
-                            src={childPost.media_url}
-                            didascalia={childPost.caption}
-                          </Post>
-                        )}
-                        <p>{childPost.caption}</p>
                       </div>
-                    ))}
+                
                   </div>
+
+                  ) : (
+                    <Post 
+                    src={post.media_url}
+                    didascalia={post.caption}
+                  />
+                  )
                 )}
               </div>
             ))}
           </div>
         )}
       </div>
->>>>>>> Stashed changes
     </div>
+  ) : (
+    <div></div>
   );
 }
