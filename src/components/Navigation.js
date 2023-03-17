@@ -19,16 +19,14 @@ function Navigation(props) {
           Welcome {props.nome}
         </Navbar.Brand>
       </Container>
-      <ButtonGroup aria-label="Basic example" class="btngroup">
+      <ButtonGroup aria-label="Basic example" className="btngroup">
         <Button disabled>seguiti {props.following}</Button>
         <Button disabled>follower {props.followers}</Button>
         <Link to="/">
-          {" "}
-          <Button class="button">Profilo</Button>
+          <Button className="button">Profilo</Button>
         </Link>
         <Link to="/stats">
-          {" "}
-          <Button class="button">Insights</Button>
+          <Button className="button">Insights</Button>
         </Link>
         {props.logout}
       </ButtonGroup>
