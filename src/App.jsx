@@ -13,8 +13,6 @@ import HomeInsights from "./pages/HomeInsights";
 
 /*
  * TODO phil:
- * - aggiungere pagina /Insights
- * - aggiungere bottoni navbar (home + insights)
  * - aggiungere controlli PrivateRoutes /Insights
  */
 
@@ -47,6 +45,7 @@ export default function App() {
           }
         >
           <Route
+            exact
             path="/"
             element={
               <Home
@@ -56,9 +55,9 @@ export default function App() {
                 ToggleAT={setFBaccessToken}
               />
             }
-            exact
           />
           <Route
+            exact
             path="/stats"
             element={
               <HomeInsights
@@ -68,7 +67,6 @@ export default function App() {
                 ToggleAT={setFBaccessToken}
               />
             }
-            exact
           />
         </Route>
         {/*<Route path="*" element={<PageNotFound />} />*/}

@@ -2,7 +2,7 @@ import Container from "react-bootstrap/Container";
 import Navbar from "react-bootstrap/Navbar";
 import Button from "react-bootstrap/Button";
 import ButtonGroup from "react-bootstrap/ButtonGroup";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 function Navigation(props) {
   return (
@@ -22,12 +22,12 @@ function Navigation(props) {
       <ButtonGroup aria-label="Basic example" className="btngroup">
         <Button disabled>seguiti {props.following}</Button>
         <Button disabled>follower {props.followers}</Button>
-        <Link to="/">
+        <NavLink exact="true" to="/">
           <Button className="button">Profilo</Button>
-        </Link>
-        <Link to="/stats">
+        </NavLink>
+        <NavLink exact="true" to="/stats">
           <Button className="button">Insights</Button>
-        </Link>
+        </NavLink>
         {props.logout}
       </ButtonGroup>
     </Navbar>

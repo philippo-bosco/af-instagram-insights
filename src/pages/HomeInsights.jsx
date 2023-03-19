@@ -1,16 +1,52 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import secureLocalStorage from "react-secure-storage";
+
+/** TODO phil:
+ * - eseguire controlli per visualizzare la pagina
+ * - eseguire controllo persistenza scheda a refresh pagina
+ * X eseguire le richieste a periodo fisso al caricamento del componente
+ * - eseguire le richieste a periodo variabile con default "day" al caricamento del componente
+ * - prendere ultimo post ed analizzarne gli insights
+ */
 
 export default function HomeInsights() {
   const [timeframe, setTimeframe] = useState("today");
   const [timeOption, setTimeOption] = useState("day");
-  const [response, setResponse] = useState(null); //response follower count
-  const [response2, setResponse2] = useState(null); //response impressions count
-  const [response3, setResponse3] = useState(null); //response reach count
+  const [responseFollower, setResponseFollower] = useState(null); //response follower count
+  const [responseImpression, setResponseImpression] = useState(null); //response impressions count
+  const [responseReach, setResponseReach] = useState(null); //response reach count
+  const [responseLifeTime, setResponseLifetime] = useState(null); //response request lifetime Component onLoad
+  const [responseDay, setResponseDay] = useState(null);
+
+  //secureLocalStorage informations
   const storedIgID = secureLocalStorage.getItem("IgID");
   const storedAT = secureLocalStorage.getItem("AT");
 
+  //funzione al caricamento del componente
+  useEffect(() => {
+    const storedAT = secureLocalStorage.getItem("AT");
+    const storedIgID = secureLocalStorage.getItem("IgID");
+    //eseguire controlli su AT e storedIgID
+    async function fetchLifetimeReq() {
+      const response = await axios.get(
+        `https://graph.facebook.com/v16.0/${storedIgID}/insights?metric=audience_city,audience_country,audience_gender_age,audience_locale&period=lifetime&access_token=${storedAT}`
+      );
+      setResponseLifetime(response.data);
+      console.log(response.data);
+    }
+    async function fetchDay() {
+      const response = await axios.get(
+        `https://graph.facebook.com/v16.0/${storedIgID}/insights?metric=profile_views,get_directions_clicks,email_contacts&period=day&access_token=${storedAT}`
+      );
+      setResponseDay(response.data);
+      console.log(response.data);
+    }
+    fetchLifetimeReq();
+    fetchDay();
+  }, []);
+
+  //funzioni che settano il valore dello state in base al valore "option" selezionato dal dropdown menu
   const handleTimeframeChange = event => {
     setTimeframe(event.target.value);
   };
@@ -19,6 +55,7 @@ export default function HomeInsights() {
     setTimeOption(event.target.value);
   };
 
+  //funzione che prende in ingresso il timeframe del dropdown menu e costruisce since & until sulla base dell'opzione
   const getTimestampRange = timeframe => {
     let sinceTimestamp, untilTimestamp;
     const today = new Date();
@@ -47,49 +84,53 @@ export default function HomeInsights() {
     return { sinceTimestamp, untilTimestamp };
   };
 
-  //Profile follower count request
+  /* RICHIESTE AXIOS INSIGHTS */
+
+  //Profile follower count request (variable)
   const handleFollowerCountReq = async () => {
     const { sinceTimestamp, untilTimestamp } = getTimestampRange(timeframe);
     const requestUrl = `https://graph.facebook.com/v16.0/${storedIgID}/insights?metric=follower_count&period=day&since=${sinceTimestamp}&until=${untilTimestamp}&access_token=${storedAT}`;
     try {
       const response = await axios.get(requestUrl);
       console.log(response.data.data[0].values); //chiedere se va bene questo formato ad Ale e nel caso cambiare setResponse con questo. console.log deve mostrare reesponse completa
-      setResponse(response.data);
+      setResponseFollower(response.data);
     } catch (error) {
       console.error(error);
     }
   };
 
-  //Profile Impression request
+  //Profile Impression request (variable)
   const handleImpressionsReq = async () => {
     try {
       const response = await axios.get(
         `https://graph.facebook.com/v16.0/${storedIgID}/insights?period=${timeOption}&metric=impressions&access_token=${storedAT}`
       );
       console.log(response.data.data[0].values[0]); //chiedere se va bene questo formato ad Ale e nel caso cambiare setResponse con questo. console.log deve mostrare reesponse completa
-      setResponse2(response.data);
+      setResponseImpression(response.data);
     } catch (error) {
       console.error(error);
     }
   };
 
-  //Profile reach request
+  //Profile reach request (variable)
   const handleReachReq = async () => {
     try {
       const response = await axios.get(
         `https://graph.facebook.com/v16.0/${storedIgID}/insights?period=${timeOption}&metric=reach&access_token=${storedAT}`
       );
       console.log(response.data); //chiedere se va bene questo formato ad Ale e nel caso cambiare setResponse con questo. console.log deve mostrare reesponse completa
-      setResponse3(response.data);
+      setResponseReach(response.data);
     } catch (error) {
       console.error(error);
     }
   };
 
-  //stringify section
-  const parsedFollowerCount = JSON.stringify(response);
-  const parsedImpression = JSON.stringify(response2);
-  const parsedReach = JSON.stringify(response3);
+  //stringify section (solo per mostrare a video, verrà rimossa)
+  const parsedFollowerCount = JSON.stringify(responseFollower);
+  const parsedImpression = JSON.stringify(responseImpression);
+  const parsedReach = JSON.stringify(responseReach);
+  const parsedLifetime = JSON.stringify(responseLifeTime);
+  const parsedDay = JSON.stringify(responseDay);
 
   return (
     <div>
@@ -129,6 +170,15 @@ export default function HomeInsights() {
           <p>{parsedReach}</p>
         </div>
       </div>
+      <div id="lifetime">
+        <h3> richiesta al caricamento del componente (console):</h3>
+        <div>
+          <p>{parsedLifetime}</p>
+        </div>
+        <div>
+          <p>{parsedDay}</p>
+        </div>
+      </div>
     </div>
   );
 }
@@ -146,4 +196,19 @@ export default function HomeInsights() {
 /** richiesta di prova:
   curl -i -X GET \
  "https://graph.facebook.com/v16.0/${storedIgId}/insights?period=${periodTime}&metric=reach&access_token=${storedAT}"
+ */
+
+/** RICHIESTA x ULTIMO POST del profilo:
+  * richiesta get REEL insights metrics:
+ "https://graph.facebook.com/v16.0/${lastmedia-ig-id}/insights?metric=comments,likes,plays,reach,saved,shares,total_interactions&access_token=${storedAT}"
+
+   * richiesta get VIDEO & FOTO insights metrics:
+ "https://graph.facebook.com/v16.0/${lastmedia-ig-id}/insights?metric=engagement,impressions,reach,saved,video_views&access_token=${storedAT}"
+
+    * richiesta get CAROUSEL insights metrics:
+ "https://graph.facebook.com/v16.0/${lastmedia-ig-id}/insights?metric=carousel_album_engagement,carousel_album_impressions,carousel_album_reach,carousel_album_saved,carousel_album_video_views&access_token=${storedAT}"
+
+  * Controllo se è un video+foto/reel/corousel (hanno metriche diverse disponibili)
+  * creare ${metrics} che rimpiazzi le metriche per la richiesta in base al tipo di contenuto multimediale passato
+  * useState "lastmedia-ig-id" conterrà sia media-ig-id sia il tipo di media, per eseguire il controllo
  */
