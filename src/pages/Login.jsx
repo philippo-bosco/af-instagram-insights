@@ -14,7 +14,7 @@ import LoadInstagramAccount from "../components/AccountLoad";
  * - controllare visualizzazione mobile e nel caso aggiustare
  */
 
-export default function Login({ isAuth, toggleAuth, AT, ToggleAT }) {
+export default function Login({ isAuth, toggleAuth, AT, toggleAT }) {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const storedisAuth = secureLocalStorage.getItem("isAuth");
@@ -54,7 +54,7 @@ export default function Login({ isAuth, toggleAuth, AT, ToggleAT }) {
 
     if (response.status === "connected") {
       toggleAuth(true);
-      ToggleAT(response.authResponse?.accessToken);
+      toggleAT(response.authResponse?.accessToken);
       // Salvataggio nel securelocalStorage
       secureLocalStorage.setItem("isAuth", true);
       secureLocalStorage.setItem("AT", response.authResponse?.accessToken);
@@ -63,7 +63,7 @@ export default function Login({ isAuth, toggleAuth, AT, ToggleAT }) {
       console.log(secureLocalStorage.getItem("IgID"));
     } else {
       toggleAuth(false);
-      ToggleAT("");
+      toggleAT("");
       // Salvataggio nel securelocalStorage
       secureLocalStorage.setItem("isAuth", false);
       secureLocalStorage.setItem("AT", "");

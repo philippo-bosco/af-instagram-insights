@@ -32,7 +32,7 @@ export default function App() {
               isAuth={isAuthenticated}
               toggleAuth={setisAuthenticated}
               AT={FBaccessTOKEN}
-              ToggleAT={setFBaccessToken}
+              toggleAT={setFBaccessToken}
             />
           }
         />
@@ -52,22 +52,11 @@ export default function App() {
                 isAuth={isAuthenticated}
                 toggleAuth={setisAuthenticated}
                 AT={FBaccessTOKEN}
-                ToggleAT={setFBaccessToken}
+                toggleAT={setFBaccessToken}
               />
             }
           />
-          <Route
-            exact
-            path="/stats"
-            element={
-              <HomeInsights
-                isAuth={isAuthenticated}
-                toggleAuth={setisAuthenticated}
-                AT={FBaccessTOKEN}
-                ToggleAT={setFBaccessToken}
-              />
-            }
-          />
+          <Route exact path="/stats" element={<HomeInsights />} />
         </Route>
         {/*<Route path="*" element={<PageNotFound />} />*/}
       </Routes>

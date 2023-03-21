@@ -2,22 +2,26 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import secureLocalStorage from "react-secure-storage";
 
+import LastPostInsights from "../components/lastPost";
+
 /** TODO phil:
  * - eseguire controlli per visualizzare la pagina
  * - eseguire controllo persistenza scheda a refresh pagina
  * X eseguire le richieste a periodo fisso al caricamento del componente
- * - eseguire le richieste a periodo variabile con default "day" al caricamento del componente
- * - prendere ultimo post ed analizzarne gli insights
+ * x eseguire le richieste a periodo variabile con default "day" al caricamento del componente
+ * / prendere ultimo post ed analizzarne gli insights
  */
 
 export default function HomeInsights() {
   const [timeframe, setTimeframe] = useState("today");
-  const [timeOption, setTimeOption] = useState("day");
+  const [timeOption1, setTimeOption1] = useState("day");
+  const [timeOption2, setTimeOption2] = useState("day");
   const [responseFollower, setResponseFollower] = useState(null); //response follower count
   const [responseImpression, setResponseImpression] = useState(null); //response impressions count
   const [responseReach, setResponseReach] = useState(null); //response reach count
   const [responseLifeTime, setResponseLifetime] = useState(null); //response request lifetime Component onLoad
-  const [responseDay, setResponseDay] = useState(null);
+  const [responseDay, setResponseDay] = useState(null); //response request day Component
+  //const [responseLastPost, setResponseLastPost] = useState(null);
 
   //secureLocalStorage informations
   const storedIgID = secureLocalStorage.getItem("IgID");
@@ -25,9 +29,15 @@ export default function HomeInsights() {
 
   //funzione al caricamento del componente
   useEffect(() => {
-    const storedAT = secureLocalStorage.getItem("AT");
     const storedIgID = secureLocalStorage.getItem("IgID");
-    //eseguire controlli su AT e storedIgID
+    const storedAT = secureLocalStorage.getItem("AT");
+    //const storedLastPost = secureLocalStorage.getItem("lastPost");
+    if (storedAT && storedIgID) {
+      //fetchLastPost();
+      fetchLifetimeReq();
+      fetchDay();
+    }
+    //fetch lifetime requests
     async function fetchLifetimeReq() {
       const response = await axios.get(
         `https://graph.facebook.com/v16.0/${storedIgID}/insights?metric=audience_city,audience_country,audience_gender_age,audience_locale&period=lifetime&access_token=${storedAT}`
@@ -35,6 +45,7 @@ export default function HomeInsights() {
       setResponseLifetime(response.data);
       console.log(response.data);
     }
+    //fetch day requests
     async function fetchDay() {
       const response = await axios.get(
         `https://graph.facebook.com/v16.0/${storedIgID}/insights?metric=profile_views,get_directions_clicks,email_contacts&period=day&access_token=${storedAT}`
@@ -42,8 +53,14 @@ export default function HomeInsights() {
       setResponseDay(response.data);
       console.log(response.data);
     }
-    fetchLifetimeReq();
-    fetchDay();
+    //fetch post request da modificare per rendere
+    /*async function fetchLastPost() {
+      const response = await axios.get(
+        `https://graph.facebook.com/v16.0/${storedLastPost}/insights?metric=comments,likes,plays,reach,saved,shares,total_interactions&access_token=${storedAT}`
+      );
+      setResponseLastPost(response.data);
+      console.log(response.data);
+    }*/
   }, []);
 
   //funzioni che settano il valore dello state in base al valore "option" selezionato dal dropdown menu
@@ -51,8 +68,12 @@ export default function HomeInsights() {
     setTimeframe(event.target.value);
   };
 
-  const handleTimeOptionChange = event => {
-    setTimeOption(event.target.value);
+  const handleTimeOptionChange1 = event => {
+    setTimeOption1(event.target.value);
+  };
+
+  const handleTimeOptionChange2 = event => {
+    setTimeOption2(event.target.value);
   };
 
   //funzione che prende in ingresso il timeframe del dropdown menu e costruisce since & until sulla base dell'opzione
@@ -103,7 +124,7 @@ export default function HomeInsights() {
   const handleImpressionsReq = async () => {
     try {
       const response = await axios.get(
-        `https://graph.facebook.com/v16.0/${storedIgID}/insights?period=${timeOption}&metric=impressions&access_token=${storedAT}`
+        `https://graph.facebook.com/v16.0/${storedIgID}/insights?period=${timeOption1}&metric=impressions&access_token=${storedAT}`
       );
       console.log(response.data.data[0].values[0]); //chiedere se va bene questo formato ad Ale e nel caso cambiare setResponse con questo. console.log deve mostrare reesponse completa
       setResponseImpression(response.data);
@@ -116,7 +137,7 @@ export default function HomeInsights() {
   const handleReachReq = async () => {
     try {
       const response = await axios.get(
-        `https://graph.facebook.com/v16.0/${storedIgID}/insights?period=${timeOption}&metric=reach&access_token=${storedAT}`
+        `https://graph.facebook.com/v16.0/${storedIgID}/insights?period=${timeOption2}&metric=reach&access_token=${storedAT}`
       );
       console.log(response.data); //chiedere se va bene questo formato ad Ale e nel caso cambiare setResponse con questo. console.log deve mostrare reesponse completa
       setResponseReach(response.data);
@@ -131,6 +152,7 @@ export default function HomeInsights() {
   const parsedReach = JSON.stringify(responseReach);
   const parsedLifetime = JSON.stringify(responseLifeTime);
   const parsedDay = JSON.stringify(responseDay);
+  //const parsedLastPost = JSON.stringify(responseLastPost);
 
   return (
     <div>
@@ -148,7 +170,7 @@ export default function HomeInsights() {
       </div>
       <div id="impression">
         <h3>richiesta Profile impressions (console):</h3>
-        <select value={timeOption} onChange={handleTimeOptionChange}>
+        <select value={timeOption1} onChange={handleTimeOptionChange1}>
           <option value="day">Oggi</option>
           <option value="week">Una settimana</option>
           <option value="days_28">Un mese</option>
@@ -160,7 +182,7 @@ export default function HomeInsights() {
       </div>
       <div id="reach">
         <h3>richiesta Profile reach (console):</h3>
-        <select value={timeOption} onChange={handleTimeOptionChange}>
+        <select value={timeOption2} onChange={handleTimeOptionChange2}>
           <option value="day">Oggi</option>
           <option value="week">Una settimana</option>
           <option value="days_28">Un mese</option>
@@ -173,10 +195,17 @@ export default function HomeInsights() {
       <div id="lifetime">
         <h3> richiesta al caricamento del componente (console):</h3>
         <div>
+          <h4>LifeTime request:</h4>
           <p>{parsedLifetime}</p>
         </div>
         <div>
+          <h4>Day request:</h4>
           <p>{parsedDay}</p>
+        </div>
+        <div>
+          <h4>Last Post request:</h4>
+          <LastPostInsights />
+          {/*<p>{parsedLastPost}</p>*/}
         </div>
       </div>
     </div>
