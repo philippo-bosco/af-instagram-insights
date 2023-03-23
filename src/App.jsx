@@ -7,7 +7,7 @@ import Home from "./pages/HomeAccount";
 import Login from "./pages/Login";
 import { Route, Routes } from "react-router-dom";
 import PrivateRoutes from "./components/PrivateRoutes";
-//import PageNotFound from "./pages/PageNotFound";
+import PageNotFound from "./pages/PageNotFound";
 import NavigationBar from "./components/NavBar";
 import HomeInsights from "./pages/HomeInsights";
 
@@ -24,7 +24,6 @@ export default function App() {
     <div>
       <NavigationBar isAuth={isAuthenticated} toggleAuth={setisAuthenticated} />
       <Routes>
-        {/*<Redirect from="/:url*(/+)" to={pathname.slice(0, -1)} />*/}
         <Route
           path="/login"
           element={
@@ -58,7 +57,7 @@ export default function App() {
           />
           <Route exact path="/stats" element={<HomeInsights />} />
         </Route>
-        {/*<Route path="*" element={<PageNotFound />} />*/}
+        <Route path="*" element={<PageNotFound isAuth={isAuthenticated} />} />
       </Routes>
     </div>
   );

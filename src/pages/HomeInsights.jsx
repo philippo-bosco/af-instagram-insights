@@ -2,14 +2,12 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import secureLocalStorage from "react-secure-storage";
 
+//import custom
 import LastPostInsights from "../components/lastPost";
 
 /** TODO phil:
- * - eseguire controlli per visualizzare la pagina
  * - eseguire controllo persistenza scheda a refresh pagina
- * X eseguire le richieste a periodo fisso al caricamento del componente
- * x eseguire le richieste a periodo variabile con default "day" al caricamento del componente
- * / prendere ultimo post ed analizzarne gli insights
+ * - eseguire le richieste a periodo variabile con default "day" al caricamento del componente
  */
 
 export default function HomeInsights() {
@@ -21,7 +19,6 @@ export default function HomeInsights() {
   const [responseReach, setResponseReach] = useState(null); //response reach count
   const [responseLifeTime, setResponseLifetime] = useState(null); //response request lifetime Component onLoad
   const [responseDay, setResponseDay] = useState(null); //response request day Component
-  //const [responseLastPost, setResponseLastPost] = useState(null);
 
   //secureLocalStorage informations
   const storedIgID = secureLocalStorage.getItem("IgID");
@@ -31,9 +28,7 @@ export default function HomeInsights() {
   useEffect(() => {
     const storedIgID = secureLocalStorage.getItem("IgID");
     const storedAT = secureLocalStorage.getItem("AT");
-    //const storedLastPost = secureLocalStorage.getItem("lastPost");
     if (storedAT && storedIgID) {
-      //fetchLastPost();
       fetchLifetimeReq();
       fetchDay();
     }
@@ -53,14 +48,6 @@ export default function HomeInsights() {
       setResponseDay(response.data);
       console.log(response.data);
     }
-    //fetch post request da modificare per rendere
-    /*async function fetchLastPost() {
-      const response = await axios.get(
-        `https://graph.facebook.com/v16.0/${storedLastPost}/insights?metric=comments,likes,plays,reach,saved,shares,total_interactions&access_token=${storedAT}`
-      );
-      setResponseLastPost(response.data);
-      console.log(response.data);
-    }*/
   }, []);
 
   //funzioni che settano il valore dello state in base al valore "option" selezionato dal dropdown menu
@@ -152,7 +139,6 @@ export default function HomeInsights() {
   const parsedReach = JSON.stringify(responseReach);
   const parsedLifetime = JSON.stringify(responseLifeTime);
   const parsedDay = JSON.stringify(responseDay);
-  //const parsedLastPost = JSON.stringify(responseLastPost);
 
   return (
     <div>
@@ -205,14 +191,13 @@ export default function HomeInsights() {
         <div>
           <h4>Last Post request:</h4>
           <LastPostInsights />
-          {/*<p>{parsedLastPost}</p>*/}
         </div>
       </div>
     </div>
   );
 }
 
-/**
+/** ROBBA da togliere alla fine dei tempi:
  * Richieste da effettuare:
  * - lifetime only request axios:
  * https://graph.facebook.com/v16.0/${storedIgID}/insights?metric=audience_city,audience_country,audience_gender_age,audience_locale&period=lifetime$access_token=${storedAT}

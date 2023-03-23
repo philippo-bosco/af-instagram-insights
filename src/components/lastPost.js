@@ -5,24 +5,27 @@ import axios from "axios";
 export default function LastPostInsights() {
   const [metricsPost, setMetricsPost] = useState(null);
 
-  //secure local storage gets
-
   useEffect(() => {
+    //local storage GET
     const storedIgID = secureLocalStorage.getItem("IgID");
     const storedAT = secureLocalStorage.getItem("AT");
     const storedLastPost = JSON.parse(secureLocalStorage.getItem("lastPost"));
 
+    //controllo
     if (storedIgID && storedAT) {
       fetchLastPost();
     }
+
+    //funzione al caricamento del componente, insights ultimo post pubblicato
     async function fetchLastPost() {
       const lastPostType = storedLastPost.media_type;
+      const lastPostID = storedLastPost.id;
       const metrics = getMetricsInfo(lastPostType);
       console.log(metrics);
-      const requestUrl = `https://graph.facebook.com/v16.0/${storedLastPost.id}/insights?metric=${metrics}&access_token=${storedAT}`;
+      const requestUrl = `https://graph.facebook.com/v16.0/${lastPostID}/insights?metric=${metrics}&access_token=${storedAT}`;
       try {
         const response = await axios.get(requestUrl);
-        console.log(response.data); //chiedere se va bene questo formato ad Ale e nel caso cambiare setResponse con questo. console.log deve mostrare reesponse completa
+        console.log(response.data);
         setMetricsPost(response.data);
       } catch (error) {
         console.error(error);
@@ -30,6 +33,7 @@ export default function LastPostInsights() {
     }
   }, []);
 
+  //funzione che decide le metriche in base al tipo di media
   const getMetricsInfo = lastPostType => {
     let metricType;
     switch (lastPostType) {
@@ -52,6 +56,7 @@ export default function LastPostInsights() {
     return metricType;
   };
 
+  //parsed metrics (da rimuovere)
   const parsedMetricPost = JSON.stringify(metricsPost);
   //render
   return (

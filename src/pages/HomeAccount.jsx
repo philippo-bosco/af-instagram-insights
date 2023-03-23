@@ -1,12 +1,10 @@
-import React, { useState } from "react";
-import { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import secureLocalStorage from "react-secure-storage";
 import axios from "axios";
 
 export default function Home({ isAuth, toggleAuth, AT, toggleAT }) {
   const storedIgID = secureLocalStorage.getItem("IgID");
   const [userFeed, setUserFeed] = useState();
-  //const [lastPost, setLastPost] = useState(null);
 
   useEffect(() => {
     const storedIsAuth = secureLocalStorage.getItem("isAuth");
@@ -31,12 +29,10 @@ export default function Home({ isAuth, toggleAuth, AT, toggleAT }) {
             media_type: response.data.data[0].media_type,
           };
           setUserFeed(response.data);
-          //setLastPost(response.data.data[0].id);
           console.log(response.data);
           secureLocalStorage.setItem("lastPost", JSON.stringify(lastPostInfo));
         } else {
           setUserFeed(null);
-          //setLastPost(null);
           secureLocalStorage.setItem("lastPost", "");
         }
       }
