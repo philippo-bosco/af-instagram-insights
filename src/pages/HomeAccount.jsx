@@ -4,6 +4,7 @@ import secureLocalStorage from "react-secure-storage";
 import axios from "axios";
 import Post from "../components/post";
 import Carosello from "../components/carusel";
+import {Row,Col,Container} from "react-bootstrap";
 export default function Home({ isAuth, toggleAuth, AT, ToggleAT }) {
   const storedIgID = secureLocalStorage.getItem("IgID");
   const [userFeed, setUserFeed] = useState();
@@ -31,45 +32,26 @@ export default function Home({ isAuth, toggleAuth, AT, ToggleAT }) {
 
   //render
   return isAuth ? (
-    <div className="card mt-5 text-center">
-      <div className="card-body">
-        {userFeed && (
-          <div>
-            <h1>Ciao {storedIgID}</h1>
-            {userFeed.data.map(post => (
-              <div key={post.id}>
-                {post.media_type === "VIDEO" ? (
-                  <Post
-                  video={true}
-                  src={post.media_url}
-                  didascalia={post.caption}
-                />
-                ) : (
-                  post.media_type === "CAROUSEL_ALBUM" ? (
-                    <div>
-                      {console.log(post)}
-                      <div key={post.children.data + 1}> 
-                           <Carosello
-                           src={post.children.data}
-                           
-                            />
-                      </div>
-                
-                  </div>
-
-                  ) : (
-                    <Post 
-                    src={post.media_url}
-                    didascalia={post.caption}
-                  />
-                  )
-                )}
-              </div>
-            ))}
-          </div>
+    <Container>
+  <Row xs={1} sm={2} md={3} lg={4} className="d-flex flex-wrap justify-content-center">
+    {userFeed?.data?.map(post => (
+      <Col key={post.id} className="my-3">
+        {post.media_type === "VIDEO" ? (
+          <Post src={post.media_url} didascalia={post.caption} video={true} />
+        ) : post.media_type === "CAROUSEL_ALBUM" ? (
+          <Carosello src={post.children.data} didascalia={post.caption} />
+        ) : (
+          <Post src={post.media_url} didascalia={post.caption} />
         )}
-      </div>
-    </div>
+      </Col>
+    ))}
+  </Row>
+</Container>
+
+
+
+
+
   ) : (
     <div></div>
   );

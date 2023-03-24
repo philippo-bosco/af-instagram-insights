@@ -5,8 +5,8 @@ import axios from "axios";
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import { Link } from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
-import Navbar from 'react-bootstrap/Navbar';
-import Button from 'react-bootstrap/Button';
+import {Image, Button, Navbar, Nav} from 'react-bootstrap';
+import Offcanvas from 'react-bootstrap/Offcanvas';
 
 /*
  * TODO alefuma:
@@ -75,52 +75,55 @@ export default function Navigationbar({ isAuth, toggleAuth }) {
   }
 
   return isAuth ? (
-    <nav >
+    <>
           {userData && (
-            <>
-                 <Container>
-                  <div classname="container-fluid navbar-brand">
-                   
-                   <img
-                     alt="immagine"
-                     src={userData.profile_picture_url}
-                     width="50"
-                     height="50"
-                     className="d-inline-block align-top rounded-circle margin-right"
-                   />            
-                 Welcome {userData.name}
-                 <Button
-                className="button"
-                onClick={handleLogout}
-                disabled={isLoading}
-              >
-                {isLoading && (
-                  <span
-                    className="spinner-border spinner-border-sm mr-2"
-                    role="status"
-                    aria-hidden="true"
-                  ></span>
+           <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark" sticky="top" style={{ height: '100%', margin: '0', padding: '0', backgroundColor: '#000' }}>
+           <Container fluid style={{ height: '100%', margin: '0', padding: '0' }} >
+           <Navbar.Brand style={{ display: 'flex', alignItems: 'center' }}>
+            <img
+               alt="immagine"
+               src={userData.profile_picture_url}
+               width="50"
+               height="50"
+               className="d-inline-block align-top rounded-circle"
+            />
+              <span style={{ marginLeft: '10px' }}>Welcome {userData.name}</span>
+            </Navbar.Brand>
+             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+             <Navbar.Collapse id="responsive-navbar-nav">
+            <Nav className="me-auto">
+            <Nav.Link className="navbarStats" disabled >post {userData.media_count}</Nav.Link>
+            <Nav.Link  className="navbarStats" disabled>seguiti {userData.follows_count}</Nav.Link>
+            <Nav.Link  className="navbarStats" disabled>follower {userData.followers_count}</Nav.Link> 
+           </Nav>
+           <Nav>
+            <Link to="/home">
+              <Button className="button">Profilo</Button>
+            </Link>
+            <Link to="/stats">
+              <Button className="button">Insights</Button>
+             </Link>
+             <Button
+              className="button mb-3 floatright"
+              onClick={handleLogout}
+              disabled={isLoading}
+               variant="outline-light"
+            >
+               {isLoading && (
+                <span
+                 className="spinner-border spinner-border-sm mr-2"
+                role="status"
+               aria-hidden="true"
+              ></span>
                 )}
-                Logout    
-              </Button>
-               
-             <Button disabled    >post {userData.media_count}</Button>
-            <Button disabled    >seguiti {userData.follows_count}</Button>
-            <Button disabled    >follower {userData.followers_count}</Button>  
-            </div>
-            </Container>
-            
-             </>
-          )}
-        
-     
-       <div className="d-flex justify-content-center">
-        <Link to="/home"> <Button  class="button"  >Profilo</Button></Link>
-             <Link to="/stats"> <Button class ="button"  >Insights</Button></Link>
-             </div>
-       
-       
-    </nav>
+                Logout
+            </Button>
+              </Nav>
+             </Navbar.Collapse>
+           </Container>
+           </Navbar>
+          )}   
+    </>
   ) : (
     <div></div>
   );

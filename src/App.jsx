@@ -2,7 +2,7 @@ import React from "react";
 import { useState } from "react";
 
 //import custom
-import "./App.css";
+import "./styles/App.css";
 import Home from "./pages/HomeAccount";
 import Login from "./pages/Login";
 import { Route, Routes } from "react-router-dom";
