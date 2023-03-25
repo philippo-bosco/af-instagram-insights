@@ -2,16 +2,9 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import secureLocalStorage from "react-secure-storage";
 import axios from "axios";
-import Navigation from "./Navigation";
-
-/*
- * TODO alefuma:
- * - sistemare frontend navbar (i dati sono salvati nello useState userData)
- *        Se hai bisogno di ulteriori fields da mostrare, guarda questo link e aggiungili alla richiesta axios:
- *        https://developers.facebook.com/docs/instagram-api/reference/ig-user#fields
- * - se rimpicciolisco la finestra il pulsante logout sparisce ;(   (dagli un occhio forse ho fatto io una cazzata con css)
- * - controllare visualizzazione mobile e nel caso aggiustare
- */
+import { Link } from "react-router-dom";
+import Container from "react-bootstrap/Container";
+import { Button, Navbar, Nav } from "react-bootstrap";
 
 export default function Navigationbar({ isAuth, toggleAuth }) {
   const navigate = useNavigate();
@@ -36,15 +29,14 @@ export default function Navigationbar({ isAuth, toggleAuth }) {
     setIsLoading(true);
 
     // Controlla se l'access token esiste
-    const accessToken = secureLocalStorage.getItem("AT");
-    if (accessToken) {
+    if (storedAT) {
       window.FB.getLoginStatus(function (response) {
         const tokenStatus = response.authResponse?.accessToken;
-        if (response.status === "connected" && tokenStatus === accessToken) {
-          // Effettua il logout da Facebook solo se l'access token esiste
+        if (response.status === "connected" && tokenStatus === storedAT) {
+          // Effettua il logout da Facebook solo se l'access token corrisponde
           window.FB.api("/me/permissions", "delete", null, () => {
             window.FB.logout();
-            // Rimuovi i dati di autenticazione dalla cache del browser
+            // Rimuove i dati di autenticazione dalla cache del browser
             secureLocalStorage.removeItem("isAuth");
             secureLocalStorage.removeItem("AT");
             secureLocalStorage.removeItem("IgID");
@@ -72,32 +64,78 @@ export default function Navigationbar({ isAuth, toggleAuth }) {
   }
 
   return isAuth ? (
-    <nav>
+    <>
       {userData && (
-        <Navigation
-          src={userData.profile_picture_url}
-          nome={userData.username}
-          following={userData.follows_count}
-          followers={userData.followers_count}
-        />
-      )}
-      {isAuth && (
-        <button
-          className="btn btn-danger"
-          onClick={handleLogout}
-          disabled={isLoading}
+        <Navbar
+          collapseOnSelect
+          expand="lg"
+          bg="dark"
+          variant="dark"
+          sticky="top"
+          style={{
+            height: "100%",
+            margin: "0",
+            padding: "0",
+            backgroundColor: "#000",
+          }}
         >
-          {isLoading && (
-            <span
-              className="spinner-border spinner-border-sm mr-2"
-              role="status"
-              aria-hidden="true"
-            ></span>
-          )}
-          Logout
-        </button>
+          <Container
+            fluid
+            style={{ height: "100%", margin: "0", padding: "0" }}
+          >
+            <Navbar.Brand style={{ display: "flex", alignItems: "center" }}>
+              <img
+                alt="immagine"
+                src={userData.profile_picture_url}
+                width="50"
+                height="50"
+                className="d-inline-block align-top rounded-circle"
+              />
+              <span style={{ marginLeft: "10px" }}>
+                Welcome {userData.name}
+              </span>
+            </Navbar.Brand>
+            <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+            <Navbar.Collapse id="responsive-navbar-nav">
+              <Nav className="me-auto">
+                <Nav.Link className="navbarStats" disabled>
+                  post {userData.media_count}
+                </Nav.Link>
+                <Nav.Link className="navbarStats" disabled>
+                  seguiti {userData.follows_count}
+                </Nav.Link>
+                <Nav.Link className="navbarStats" disabled>
+                  follower {userData.followers_count}
+                </Nav.Link>
+              </Nav>
+              <Nav>
+                <Link to="/">
+                  <Button className="button">Profilo</Button>
+                </Link>
+                <Link to="/stats">
+                  <Button className="button">Insights</Button>
+                </Link>
+                <Button
+                  className="button mb-3 floatright"
+                  onClick={handleLogout}
+                  disabled={isLoading}
+                  variant="outline-light"
+                >
+                  {isLoading && (
+                    <span
+                      className="spinner-border spinner-border-sm mr-2"
+                      role="status"
+                      aria-hidden="true"
+                    ></span>
+                  )}
+                  Logout
+                </Button>
+              </Nav>
+            </Navbar.Collapse>
+          </Container>
+        </Navbar>
       )}
-    </nav>
+    </>
   ) : (
     <div></div>
   );

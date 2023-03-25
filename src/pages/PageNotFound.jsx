@@ -28,7 +28,7 @@ export default function PageNotFound() {
   }, []);
 
   return (
-    <main className="container" style={{ color: "black" }}>
+    <main className="container" style={{ color: "white" }}>
       <h1>
         <Typed
           strings={["404 Page Not Found"]}

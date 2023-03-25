@@ -1,7 +1,6 @@
 import secureLocalStorage from "react-secure-storage";
 
 const getFacebookPages = responseAT => {
-  //const storedAT = secureLocalStorage.getItem("AT");
   return new Promise(resolve => {
     window.FB.api("me/accounts", { access_token: responseAT }, response => {
       resolve(response.data);
