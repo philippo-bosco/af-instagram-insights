@@ -1,14 +1,20 @@
 import React from "react";
 import { useState } from "react";
+import { Route, Routes } from "react-router-dom";
 
 //import custom
-import "./App.css";
+import "./styles/App.css";
 import Home from "./pages/HomeAccount";
 import Login from "./pages/Login";
-import { Route, Routes } from "react-router-dom";
 import PrivateRoutes from "./components/PrivateRoutes";
-//import PageNotFound from "./pages/PageNotFound";
+import PageNotFound from "./pages/PageNotFound";
 import NavigationBar from "./components/NavBar";
+import HomeInsights from "./pages/HomeInsights";
+
+/*
+ * TODO phil:
+ * - aggiungere controlli PrivateRoutes /Insights
+ */
 
 export default function App() {
   const [isAuthenticated, setisAuthenticated] = useState(null);
@@ -18,7 +24,6 @@ export default function App() {
     <div>
       <NavigationBar isAuth={isAuthenticated} toggleAuth={setisAuthenticated} />
       <Routes>
-        {/*<Redirect from="/:url*(/+)" to={pathname.slice(0, -1)} />*/}
         <Route
           path="/login"
           element={
@@ -26,7 +31,7 @@ export default function App() {
               isAuth={isAuthenticated}
               toggleAuth={setisAuthenticated}
               AT={FBaccessTOKEN}
-              ToggleAT={setFBaccessToken}
+              toggleAT={setFBaccessToken}
             />
           }
         />
@@ -39,19 +44,20 @@ export default function App() {
           }
         >
           <Route
+            exact
             path="/"
             element={
               <Home
                 isAuth={isAuthenticated}
                 toggleAuth={setisAuthenticated}
                 AT={FBaccessTOKEN}
-                ToggleAT={setFBaccessToken}
+                toggleAT={setFBaccessToken}
               />
             }
-            exact
           />
+          <Route exact path="/stats" element={<HomeInsights />} />
         </Route>
-        {/*<Route path="*" element={<PageNotFound />} />*/}
+        <Route path="*" element={<PageNotFound isAuth={isAuthenticated} />} />
       </Routes>
     </div>
   );

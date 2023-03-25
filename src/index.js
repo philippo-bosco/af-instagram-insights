@@ -5,7 +5,7 @@ import { BrowserRouter } from "react-router-dom";
 //import customs
 import initFacebookSDK from "./components/initFacebookSDK";
 import App from "./App";
-import "./index.css";
+import "./styles/index.css";
 
 initFacebookSDK().then(startApp);
 const root = ReactDOM.createRoot(document.getElementById("root"));
