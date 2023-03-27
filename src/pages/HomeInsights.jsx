@@ -4,6 +4,13 @@ import secureLocalStorage from "react-secure-storage";
 
 //import custom
 import LastPostInsights from "../components/lastPost";
+import {
+  CityGraph,
+  CountryGraph,
+  LangChart,
+  FollowerCountGraph,
+  GenderAgeChart,
+} from "../components/Grafici";
 
 /** TODO phil:
  * - eseguire controllo persistenza scheda a refresh pagina
@@ -11,6 +18,7 @@ import LastPostInsights from "../components/lastPost";
  */
 
 export default function HomeInsights() {
+  const [isLoading, setIsLoading] = useState(false);
   const [timeframe, setTimeframe] = useState("today");
   const [timeOption1, setTimeOption1] = useState("day");
   const [timeOption2, setTimeOption2] = useState("day");
@@ -26,6 +34,7 @@ export default function HomeInsights() {
 
   //funzione al caricamento del componente
   useEffect(() => {
+    setIsLoading(true);
     const storedIgID = secureLocalStorage.getItem("IgID");
     const storedAT = secureLocalStorage.getItem("AT");
     if (storedAT && storedIgID) {
@@ -37,18 +46,25 @@ export default function HomeInsights() {
       const response = await axios.get(
         `https://graph.facebook.com/v16.0/${storedIgID}/insights?metric=audience_city,audience_country,audience_gender_age,audience_locale&period=lifetime&access_token=${storedAT}`
       );
+      console.log(
+        "audience_city,audience_country,audience_gender_age,audience_locale"
+      );
       setResponseLifetime(response.data);
-      console.log(response.data);
+      console.log(response.data.data[2]);
     }
     //fetch day requests
     async function fetchDay() {
       const response = await axios.get(
         `https://graph.facebook.com/v16.0/${storedIgID}/insights?metric=profile_views,get_directions_clicks,email_contacts&period=day&access_token=${storedAT}`
       );
+      console.log(
+        "response (profile_views,get_directions_clicks,email_contact):"
+      );
       setResponseDay(response.data);
       console.log(response.data);
     }
-  }, []);
+    setIsLoading(false);
+  }, [setIsLoading]);
 
   //funzioni che settano il valore dello state in base al valore "option" selezionato dal dropdown menu
   const handleTimeframeChange = event => {
@@ -100,7 +116,8 @@ export default function HomeInsights() {
     const requestUrl = `https://graph.facebook.com/v16.0/${storedIgID}/insights?metric=follower_count&period=day&since=${sinceTimestamp}&until=${untilTimestamp}&access_token=${storedAT}`;
     try {
       const response = await axios.get(requestUrl);
-      console.log(response.data.data[0].values); //chiedere se va bene questo formato ad Ale e nel caso cambiare setResponse con questo. console.log deve mostrare reesponse completa
+      console.log("profile follower:");
+      console.log(response.data); //chiedere se va bene questo formato ad Ale e nel caso cambiare setResponse con questo. console.log deve mostrare reesponse completa
       setResponseFollower(response.data);
     } catch (error) {
       console.error(error);
@@ -113,6 +130,7 @@ export default function HomeInsights() {
       const response = await axios.get(
         `https://graph.facebook.com/v16.0/${storedIgID}/insights?period=${timeOption1}&metric=impressions&access_token=${storedAT}`
       );
+      console.log("profile impression:");
       console.log(response.data.data[0].values[0]); //chiedere se va bene questo formato ad Ale e nel caso cambiare setResponse con questo. console.log deve mostrare reesponse completa
       setResponseImpression(response.data);
     } catch (error) {
@@ -126,6 +144,7 @@ export default function HomeInsights() {
       const response = await axios.get(
         `https://graph.facebook.com/v16.0/${storedIgID}/insights?period=${timeOption2}&metric=reach&access_token=${storedAT}`
       );
+      console.log("reach:");
       console.log(response.data); //chiedere se va bene questo formato ad Ale e nel caso cambiare setResponse con questo. console.log deve mostrare reesponse completa
       setResponseReach(response.data);
     } catch (error) {
@@ -134,13 +153,17 @@ export default function HomeInsights() {
   };
 
   //stringify section (solo per mostrare a video, verrà rimossa)
-  const parsedFollowerCount = JSON.stringify(responseFollower);
+  //const parsedFollowerCount = JSON.stringify(responseFollower);
   const parsedImpression = JSON.stringify(responseImpression);
   const parsedReach = JSON.stringify(responseReach);
-  const parsedLifetime = JSON.stringify(responseLifeTime);
+  //const parsedLifetime = JSON.stringify(responseLifeTime);
   const parsedDay = JSON.stringify(responseDay);
 
-  return (
+  return isLoading ? (
+    <div>
+      <p>ciao</p>
+    </div>
+  ) : (
     <div>
       <div id="follower-count">
         <h3>Richiesta follower Count (console):</h3>
@@ -150,9 +173,11 @@ export default function HomeInsights() {
           <option value="month">Un mese</option>
         </select>
         <button onClick={handleFollowerCountReq}>Invia richiesta</button>
-        <div>
-          <p>{parsedFollowerCount}</p>
-        </div>
+        {responseFollower && (
+          <div style={{ width: "600px", height: "600px" }}>
+            <FollowerCountGraph data={responseFollower.data} />
+          </div>
+        )}
       </div>
       <div id="impression">
         <h3>richiesta Profile impressions (console):</h3>
@@ -178,21 +203,35 @@ export default function HomeInsights() {
           <p>{parsedReach}</p>
         </div>
       </div>
-      <div id="lifetime">
-        <h3> richiesta al caricamento del componente (console):</h3>
-        <div>
-          <h4>LifeTime request:</h4>
-          <p>{parsedLifetime}</p>
+      {responseLifeTime && (
+        <div id="lifetime">
+          <h3> richiesta al caricamento del componente (console):</h3>
+          <div>
+            <h4>LifeTime request:</h4>
+            <div style={{ width: "600px", height: "600px" }}>
+              <CityGraph data={responseLifeTime.data} />
+            </div>
+            <div style={{ width: "600px", height: "600px" }}>
+              <CountryGraph data={responseLifeTime.data} />
+            </div>
+            <div style={{ width: "600px", height: "600px" }}>
+              <GenderAgeChart data={responseLifeTime.data} />
+            </div>
+            <div style={{ width: "600px", height: "600px" }}>
+              <LangChart data={responseLifeTime.data} />
+            </div>
+          </div>
+          <div>
+            <br />
+            <h4>Day request:</h4>
+            <p>{parsedDay}</p>
+          </div>
+          <div>
+            <h4>Last Post request:</h4>
+            <LastPostInsights />
+          </div>
         </div>
-        <div>
-          <h4>Day request:</h4>
-          <p>{parsedDay}</p>
-        </div>
-        <div>
-          <h4>Last Post request:</h4>
-          <LastPostInsights />
-        </div>
-      </div>
+      )}
     </div>
   );
 }
