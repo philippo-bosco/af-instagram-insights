@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import secureLocalStorage from "react-secure-storage";
-import Typed from "react-typed";
+import Typewriter from "typewriter-effect";
 
 //import custom
 import "../styles/PageNotFoundStyle.css";
@@ -29,14 +29,14 @@ export default function PageNotFound() {
 
   return (
     <main className="container" style={{ color: "white" }}>
-      <h1>
-        <Typed
-          strings={["404 Page Not Found"]}
-          typeSpeed={80}
-          backSpeed={60}
-          loop={false}
-        />
-      </h1>
+      <Typewriter
+        options={{
+          strings: ["404 Page Not Found"],
+          autoStart: true,
+          delay: 80,
+          onComplete: () => {},
+        }}
+      />
       <br />
       {storedAT ? (
         <p>

@@ -21,10 +21,10 @@ export default function Home({ isAuth, toggleAuth, AT, toggleAT }) {
       toggleAuth(false);
     }
     toggleAT(storedAT);
-    fetchFeed();
-    //function feed
-    async function fetchFeed() {
-      if (AT && storedIgID) {
+
+    // Execute the API request only if both AT and storedIgID exist
+    if (AT && storedIgID) {
+      async function fetchFeed() {
         const response = await axios.get(
           `https://graph.facebook.com/v16.0/${storedIgID}/media?fields=id%2Ccaption%2Ccomments_count%2Clike_count%2Cmedia_url%2Cowner%2Cpermalink%2Cmedia_type%2Cusername%2Cchildren%7Bmedia_type%2Cmedia_url%2Cowner%2Cthumbnail_url%7D%2Ccomments%7Btext%7D%2Ctimestamp&access_token=${AT}`
         );
@@ -41,6 +41,8 @@ export default function Home({ isAuth, toggleAuth, AT, toggleAT }) {
           secureLocalStorage.setItem("lastPost", "");
         }
       }
+
+      fetchFeed();
     }
   }, [toggleAuth, toggleAT, AT, storedIgID]);
 

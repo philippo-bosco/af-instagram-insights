@@ -3,7 +3,7 @@ import axios from "axios";
 import secureLocalStorage from "react-secure-storage";
 
 //import custom
-import LastPostInsights from "../components/lastPost";
+import LastPostInsights from "../components/LastPost";
 import {
   CityGraph,
   CountryGraph,

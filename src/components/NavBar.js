@@ -20,6 +20,7 @@ export default function Navigationbar({ isAuth, toggleAuth }) {
           `https://graph.facebook.com/v16.0/${storedIgID}?fields=followers_count,follows_count,media_count,name,profile_picture_url,username&access_token=${storedAT}`
         );
         setUserData(response.data);
+        console.log(response.data);
       }
     }
     fetchData();

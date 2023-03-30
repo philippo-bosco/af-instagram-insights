@@ -25,7 +25,7 @@ export default function Login({ isAuth, toggleAuth, AT, toggleAT }) {
     if (storedisAuth && storedAT && storedIgID) {
       navigate("/");
     }
-  }, [storedisAuth, storedAT, storedIgID, navigate]);
+  }, [storedisAuth, storedAT, storedIgID, AT, navigate]);
 
   /*
   FUNZIONAMENTO useEffect --> se viene dichiarato e ci passiamo dentro qualsiasi cosa senza mettere un array finale, 
@@ -50,8 +50,6 @@ export default function Login({ isAuth, toggleAuth, AT, toggleAT }) {
   }
 
   async function statusChangeCallback(response) {
-    //setIsLoading(false);
-
     if (response.status === "connected") {
       toggleAuth(true);
       toggleAT(response.authResponse?.accessToken);
