@@ -3,7 +3,12 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 
 //funzione caricamento componente
-async function fetchLastPost(storedAT,storedLastPost,setMetricsPost,getMetricsInfo) {
+async function fetchLastPost(
+  storedAT,
+  storedLastPost,
+  setMetricsPost,
+  getMetricsInfo
+) {
   const lastPostType = storedLastPost.media_type;
   const lastPostID = storedLastPost.id;
   const metrics = getMetricsInfo(lastPostType);
@@ -29,25 +34,9 @@ export default function LastPostInsights() {
 
     //controllo
     if (storedIgID && storedAT) {
-      fetchLastPost(storedAT,storedLastPost,setMetricsPost,getMetricsInfo);
+      fetchLastPost(storedAT, storedLastPost, setMetricsPost, getMetricsInfo);
     }
-
-    //funzione al caricamento del componente, insights ultimo post pubblicato
-    /*async function fetchLastPost() {
-      const lastPostType = storedLastPost.media_type;
-      const lastPostID = storedLastPost.id;
-      const metrics = getMetricsInfo(lastPostType);
-      console.log(metrics);
-      const requestUrl = `https://graph.facebook.com/v16.0/${lastPostID}/insights?metric=${metrics}&access_token=${storedAT}`;
-      try {
-        const response = await axios.get(requestUrl);
-        console.log(response.data);
-        setMetricsPost(response.data);
-      } catch (error) {
-        console.error(error);
-      }
-    }*/
-  },[]);
+  }, []);
 
   //funzione che decide le metriche in base al tipo di media
   const getMetricsInfo = lastPostType => {

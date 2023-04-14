@@ -6,25 +6,29 @@ import { Link } from "react-router-dom";
 import Container from "react-bootstrap/Container";
 import { Button, Navbar, Nav } from "react-bootstrap";
 
-export default function Navigationbar({ isAuth, toggleAuth }) {
+export default function Navigationbar() {
   const navigate = useNavigate();
+  const [isAuth, setIsAuth] = useState();
   const [isLoading, setIsLoading] = useState(false);
   const [userData, setUserData] = useState(null); // stato per contenere i dati dell'utente
   const storedAT = secureLocalStorage.getItem("AT");
-  const storedIgID = secureLocalStorage.getItem("IgID"); //ig-user-id per effettuare le chiamate alla Graph API
+  const storedIgID = secureLocalStorage.getItem("IgID");
 
   useEffect(() => {
-    async function fetchData() {
+    const fetchData = async () => {
       if (storedAT && storedIgID) {
+        setIsAuth(true);
         const response = await axios.get(
           `https://graph.facebook.com/v16.0/${storedIgID}?fields=followers_count,follows_count,media_count,name,profile_picture_url,username&access_token=${storedAT}`
         );
         setUserData(response.data);
         console.log(response.data);
+      } else {
+        setIsAuth(false);
       }
-    }
+    };
     fetchData();
-  }, [storedAT, storedIgID]);
+  }, [storedIgID, storedAT]);
 
   async function handleLogout() {
     setIsLoading(true);
@@ -42,7 +46,7 @@ export default function Navigationbar({ isAuth, toggleAuth }) {
             secureLocalStorage.removeItem("AT");
             secureLocalStorage.removeItem("IgID");
             // Aggiorna lo stato dell'autenticazione
-            toggleAuth(false);
+            setIsAuth(false);
             setIsLoading(false);
             // Torna alla pagina di login
             navigate("/login");
@@ -55,7 +59,7 @@ export default function Navigationbar({ isAuth, toggleAuth }) {
           secureLocalStorage.removeItem("IgID");
           secureLocalStorage.removeItem("lastPost");
           // Aggiorna lo stato dell'autenticazione
-          toggleAuth(false);
+          setIsAuth(false);
           setIsLoading(false);
           // Torna alla pagina di login
           navigate("/login");

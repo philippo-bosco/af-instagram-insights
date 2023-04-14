@@ -1,3 +1,7 @@
+/**
+ * FILE dedicato alle richieste di grafici, esportati in HomeInsights
+ */
+
 import {
   Chart as ChartJS,
   ArcElement,
@@ -140,8 +144,9 @@ function LangChart({ data }) {
  * TODO phil:
  * - aggiungere state che prenda il numero vero di follower dalla navbar in FollowerCountGraph
  */
+
 function FollowerCountGraph({ data }) {
-  const INITIAL_Y_VALUE = 300;
+  const INITIAL_Y_VALUE = 300; //da cambiare con valore reale follower
   const labels = data[0].values.map(v => v.end_time.slice(0, 10));
   const firstValue = data[0].values[0].value;
   const yValues = [INITIAL_Y_VALUE + firstValue];

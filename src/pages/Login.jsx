@@ -14,7 +14,7 @@ import LoadInstagramAccount from "../components/AccountLoad";
  * - controllare visualizzazione mobile e nel caso aggiustare
  */
 
-export default function Login({ isAuth, toggleAuth, AT, toggleAT }) {
+export default function Login() {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const storedisAuth = secureLocalStorage.getItem("isAuth");
@@ -25,7 +25,7 @@ export default function Login({ isAuth, toggleAuth, AT, toggleAT }) {
     if (storedisAuth && storedAT && storedIgID) {
       navigate("/");
     }
-  }, [storedisAuth, storedAT, storedIgID, AT, navigate]);
+  }, [storedisAuth, storedAT, storedIgID, navigate]);
 
   /*
   FUNZIONAMENTO useEffect --> se viene dichiarato e ci passiamo dentro qualsiasi cosa senza mettere un array finale, 
@@ -51,8 +51,6 @@ export default function Login({ isAuth, toggleAuth, AT, toggleAT }) {
 
   async function statusChangeCallback(response) {
     if (response.status === "connected") {
-      toggleAuth(true);
-      toggleAT(response.authResponse?.accessToken);
       // Salvataggio nel securelocalStorage
       secureLocalStorage.setItem("isAuth", true);
       secureLocalStorage.setItem("AT", response.authResponse?.accessToken);
@@ -60,8 +58,6 @@ export default function Login({ isAuth, toggleAuth, AT, toggleAT }) {
       await LoadInstagramAccount(response);
       console.log(secureLocalStorage.getItem("IgID"));
     } else {
-      toggleAuth(false);
-      toggleAT("");
       // Salvataggio nel securelocalStorage
       secureLocalStorage.setItem("isAuth", false);
       secureLocalStorage.setItem("AT", "");

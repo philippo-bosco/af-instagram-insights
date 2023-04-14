@@ -8,8 +8,8 @@ import "../styles/PageNotFoundStyle.css";
 
 export default function PageNotFound() {
   const navigate = useNavigate();
-  const [countdown, setCountdown] = useState(5);
-  const storedAT = secureLocalStorage.getItem("AT");
+  const [countdown, setCountdown] = useState(10);
+  const storedIsAuth = secureLocalStorage.getItem("isAuth");
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -30,15 +30,12 @@ export default function PageNotFound() {
   return (
     <main className="container" style={{ color: "white" }}>
       <Typewriter
-        options={{
-          strings: ["404 Page Not Found"],
-          autoStart: true,
-          delay: 80,
-          onComplete: () => {},
+        onInit={typewriter => {
+          typewriter.typeString("404, Page not Found!").pauseFor(5000).start();
         }}
       />
       <br />
-      {storedAT ? (
+      {storedIsAuth ? (
         <p>
           Redirecting to Home in <strong>{countdown} </strong>
           seconds.
