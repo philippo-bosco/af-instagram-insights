@@ -31,7 +31,12 @@ export default function PageNotFound() {
     <main className="container" style={{ color: "white" }}>
       <Typewriter
         onInit={typewriter => {
-          typewriter.typeString("404, Page not Found!").pauseFor(5000).start();
+          typewriter
+            .typeString(
+              "<strong style='font-size: 2em;'>404, Page not Found!</strong>"
+            )
+            .pauseFor(5000)
+            .start();
         }}
       />
       <br />

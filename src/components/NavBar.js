@@ -45,6 +45,7 @@ export default function Navigationbar() {
             secureLocalStorage.removeItem("isAuth");
             secureLocalStorage.removeItem("AT");
             secureLocalStorage.removeItem("IgID");
+            secureLocalStorage.removeItem("lastPost");
             // Aggiorna lo stato dell'autenticazione
             setIsAuth(false);
             setIsLoading(false);

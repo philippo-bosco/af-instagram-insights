@@ -12,6 +12,7 @@ import HomeInsights from "./pages/HomeInsights";
 
 /*
  * TODO phil:
+ * - aggiungere loading spinenr in tutte le pagine
  * - sistemare doppie richieste HomeAccount
  * - sistermare doppie richieste HomeInsights
  * - sistemare doppie richieste PrivateRoutes

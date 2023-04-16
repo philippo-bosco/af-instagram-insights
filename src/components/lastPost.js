@@ -16,8 +16,15 @@ async function fetchLastPost(
   const requestUrl = `https://graph.facebook.com/v16.0/${lastPostID}/insights?metric=${metrics}&access_token=${storedAT}`;
   try {
     const response = await axios.get(requestUrl);
+    const responsePostInfo = {
+      engagement: response.data.data[0].values[0].value,
+      impressions: response.data.data[1].values[0].value,
+      reach: response.data.data[2].values[0].value,
+      saved: response.data.data[3].values[0].value,
+      video_views: response.data.data[4].values[0].value,
+    };
     console.log(response.data);
-    setMetricsPost(response.data);
+    setMetricsPost(responsePostInfo);
   } catch (error) {
     console.error(error);
   }
@@ -62,11 +69,15 @@ export default function LastPostInsights() {
   };
 
   //parsed metrics (da rimuovere)
-  const parsedMetricPost = JSON.stringify(metricsPost);
+  //const parsedMetricPost = JSON.stringify(metricsPost);
   //render
   return (
     <div>
-      <p>{parsedMetricPost}</p>
+      <p>Engagement: {metricsPost.engagement}</p>
+      <p>Impressions: {metricsPost.impressions}</p>
+      <p>Reach: {metricsPost.reach}</p>
+      <p>Saved: {metricsPost.saved}</p>
+      <p>Video_views: {metricsPost.video_views}</p>
     </div>
   );
 }

@@ -34,7 +34,6 @@ export default function Home() {
         secureLocalStorage.setItem("lastPost", "");
       }
     }
-
     fetchFeed();
   }, [storedIgID, storedAT]);
 

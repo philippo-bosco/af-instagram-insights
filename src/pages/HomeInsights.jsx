@@ -60,7 +60,13 @@ export default function HomeInsights() {
       console.log(
         "response (profile_views,get_directions_clicks,email_contact):"
       );
-      setResponseDay(response.data);
+      const responseDayInfo = {
+        profile_views: response.data.data[0].values[1].value,
+        geo_clicks: response.data.data[1].values[1].value,
+        email_contacts: response.data.data[2].values[1].value,
+      };
+      console.log(responseDayInfo);
+      setResponseDay(responseDayInfo);
       console.log(response.data);
     }
     setIsLoading(false);
@@ -131,8 +137,8 @@ export default function HomeInsights() {
         `https://graph.facebook.com/v16.0/${storedIgID}/insights?period=${timeOption1}&metric=impressions&access_token=${storedAT}`
       );
       console.log("profile impression:");
-      console.log(response.data.data[0].values[0]); //chiedere se va bene questo formato ad Ale e nel caso cambiare setResponse con questo. console.log deve mostrare reesponse completa
-      setResponseImpression(response.data);
+      console.log(response.data); //chiedere se va bene questo formato ad Ale e nel caso cambiare setResponse con questo. console.log deve mostrare reesponse completa
+      setResponseImpression(response.data.data[0].values[0].value);
     } catch (error) {
       console.error(error);
     }
@@ -146,7 +152,7 @@ export default function HomeInsights() {
       );
       console.log("reach:");
       console.log(response.data); //chiedere se va bene questo formato ad Ale e nel caso cambiare setResponse con questo. console.log deve mostrare reesponse completa
-      setResponseReach(response.data);
+      setResponseReach(response.data.data[0].values[0].value);
     } catch (error) {
       console.error(error);
     }
@@ -154,14 +160,14 @@ export default function HomeInsights() {
 
   //stringify section (solo per mostrare a video, verrà rimossa)
   //const parsedFollowerCount = JSON.stringify(responseFollower);
+  //const parsedLifetime = JSON.stringify(responseLifeTime);
+  //const parsedDay = JSON.stringify(responseDay);
   const parsedImpression = JSON.stringify(responseImpression);
   const parsedReach = JSON.stringify(responseReach);
-  //const parsedLifetime = JSON.stringify(responseLifeTime);
-  const parsedDay = JSON.stringify(responseDay);
 
   return isLoading ? (
     <div>
-      <p>ciao</p>
+      <p>Loading...</p>
     </div>
   ) : (
     <div>
@@ -224,7 +230,9 @@ export default function HomeInsights() {
           <div>
             <br />
             <h4>Day request:</h4>
-            <p>{parsedDay}</p>
+            <p>Visite al profilo: {responseDay.profile_views}</p>
+            <p>Click luoghi: {responseDay.geo_clicks}</p>
+            <p>Contatti email: {responseDay.email_contacts}</p>
           </div>
           <div>
             <h4>Last Post request:</h4>
