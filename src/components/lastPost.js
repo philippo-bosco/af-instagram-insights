@@ -68,16 +68,16 @@ export default function LastPostInsights() {
     return metricType;
   };
 
-  //parsed metrics (da rimuovere)
-  //const parsedMetricPost = JSON.stringify(metricsPost);
   //render
   return (
-    <div>
-      <p>Engagement: {metricsPost.engagement}</p>
-      <p>Impressions: {metricsPost.impressions}</p>
-      <p>Reach: {metricsPost.reach}</p>
-      <p>Saved: {metricsPost.saved}</p>
-      <p>Video_views: {metricsPost.video_views}</p>
-    </div>
+    metricsPost && (
+      <div>
+        <p>Engagement: {metricsPost.engagement}</p>
+        <p>Impressions: {metricsPost.impressions}</p>
+        <p>Reach: {metricsPost.reach}</p>
+        <p>Saved: {metricsPost.saved}</p>
+        <p>Video_views: {metricsPost.video_views}</p>
+      </div>
+    )
   );
 }

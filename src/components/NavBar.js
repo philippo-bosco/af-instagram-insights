@@ -41,6 +41,7 @@ export default function Navigationbar() {
           // Effettua il logout da Facebook solo se l'access token corrisponde
           window.FB.api("/me/permissions", "delete", null, () => {
             window.FB.logout();
+            console.clear();
             // Rimuove i dati di autenticazione dalla cache del browser
             secureLocalStorage.removeItem("isAuth");
             secureLocalStorage.removeItem("AT");

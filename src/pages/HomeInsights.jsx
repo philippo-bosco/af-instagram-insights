@@ -65,7 +65,7 @@ export default function HomeInsights() {
         geo_clicks: response.data.data[1].values[1].value,
         email_contacts: response.data.data[2].values[1].value,
       };
-      console.log(responseDayInfo);
+      console.log(responseDayInfo); //prova
       setResponseDay(responseDayInfo);
       console.log(response.data);
     }
@@ -162,8 +162,8 @@ export default function HomeInsights() {
   //const parsedFollowerCount = JSON.stringify(responseFollower);
   //const parsedLifetime = JSON.stringify(responseLifeTime);
   //const parsedDay = JSON.stringify(responseDay);
-  const parsedImpression = JSON.stringify(responseImpression);
-  const parsedReach = JSON.stringify(responseReach);
+  //const parsedImpression = JSON.stringify(responseImpression);
+  //const parsedReach = JSON.stringify(responseReach);
 
   return isLoading ? (
     <div>
@@ -194,7 +194,7 @@ export default function HomeInsights() {
         </select>
         <button onClick={handleImpressionsReq}>Invia richiesta</button>
         <div>
-          <p>{parsedImpression}</p>
+          <p>{responseImpression}</p>
         </div>
       </div>
       <div id="reach">
@@ -206,7 +206,7 @@ export default function HomeInsights() {
         </select>
         <button onClick={handleReachReq}>Invia richiesta</button>
         <div>
-          <p>{parsedReach}</p>
+          <p>{responseReach}</p>
         </div>
       </div>
       {responseLifeTime && (
@@ -230,9 +230,13 @@ export default function HomeInsights() {
           <div>
             <br />
             <h4>Day request:</h4>
-            <p>Visite al profilo: {responseDay.profile_views}</p>
-            <p>Click luoghi: {responseDay.geo_clicks}</p>
-            <p>Contatti email: {responseDay.email_contacts}</p>
+            {responseDay && (
+              <div>
+                <p>Visite al profilo: {responseDay.profile_views}</p>
+                <p>Click luoghi: {responseDay.geo_clicks}</p>
+                <p>Contatti email: {responseDay.email_contacts}</p>
+              </div>
+            )}
           </div>
           <div>
             <h4>Last Post request:</h4>
@@ -243,33 +247,3 @@ export default function HomeInsights() {
     </div>
   );
 }
-
-/** ROBBA da togliere alla fine dei tempi:
- * Richieste da effettuare:
- * - lifetime only request axios:
- * https://graph.facebook.com/v16.0/${storedIgID}/insights?metric=audience_city,audience_country,audience_gender_age,audience_locale&period=lifetime$access_token=${storedAT}
- * - day only request axios:
- * https://graph.facebook.com/v16.0/${storedIgID}/insights?metric=get_directions_clicks,profile_views,text_message_clicks,website_clicks&period=day$access_token=${storedAT}
- * - period changeable requests:
- * https://graph.facebook.com/v16.0/${storedIgID}/insights?metric=follower_count,impressions, reach + parametri di tempo da definire
- */
-
-/** richiesta di prova:
-  curl -i -X GET \
- "https://graph.facebook.com/v16.0/${storedIgId}/insights?period=${periodTime}&metric=reach&access_token=${storedAT}"
- */
-
-/** RICHIESTA x ULTIMO POST del profilo:
-  * richiesta get REEL insights metrics:
- "https://graph.facebook.com/v16.0/${lastmedia-ig-id}/insights?metric=comments,likes,plays,reach,saved,shares,total_interactions&access_token=${storedAT}"
-
-   * richiesta get VIDEO & FOTO insights metrics:
- "https://graph.facebook.com/v16.0/${lastmedia-ig-id}/insights?metric=engagement,impressions,reach,saved,video_views&access_token=${storedAT}"
-
-    * richiesta get CAROUSEL insights metrics:
- "https://graph.facebook.com/v16.0/${lastmedia-ig-id}/insights?metric=carousel_album_engagement,carousel_album_impressions,carousel_album_reach,carousel_album_saved,carousel_album_video_views&access_token=${storedAT}"
-
-  * Controllo se è un video+foto/reel/corousel (hanno metriche diverse disponibili)
-  * creare ${metrics} che rimpiazzi le metriche per la richiesta in base al tipo di contenuto multimediale passato
-  * useState "lastmedia-ig-id" conterrà sia media-ig-id sia il tipo di media, per eseguire il controllo
- */
