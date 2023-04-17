@@ -50,23 +50,23 @@ export default function HomeInsights() {
         "audience_city,audience_country,audience_gender_age,audience_locale"
       );
       setResponseLifetime(response.data);
-      console.log(response.data.data[2]);
+      console.log(response.data);
     }
     //fetch day requests
     async function fetchDay() {
       const response = await axios.get(
         `https://graph.facebook.com/v16.0/${storedIgID}/insights?metric=profile_views,get_directions_clicks,email_contacts&period=day&access_token=${storedAT}`
       );
-      console.log(
-        "response (profile_views,get_directions_clicks,email_contact):"
-      );
+      //salvo dati che mi servono in un oggetto e lo metto nello useState
       const responseDayInfo = {
         profile_views: response.data.data[0].values[1].value,
         geo_clicks: response.data.data[1].values[1].value,
         email_contacts: response.data.data[2].values[1].value,
       };
-      console.log(responseDayInfo); //prova
       setResponseDay(responseDayInfo);
+      console.log(
+        "response (profile_views,get_directions_clicks,email_contact):"
+      );
       console.log(response.data);
     }
     setIsLoading(false);
@@ -123,7 +123,7 @@ export default function HomeInsights() {
     try {
       const response = await axios.get(requestUrl);
       console.log("profile follower:");
-      console.log(response.data); //chiedere se va bene questo formato ad Ale e nel caso cambiare setResponse con questo. console.log deve mostrare reesponse completa
+      console.log(response.data);
       setResponseFollower(response.data);
     } catch (error) {
       console.error(error);
@@ -137,7 +137,7 @@ export default function HomeInsights() {
         `https://graph.facebook.com/v16.0/${storedIgID}/insights?period=${timeOption1}&metric=impressions&access_token=${storedAT}`
       );
       console.log("profile impression:");
-      console.log(response.data); //chiedere se va bene questo formato ad Ale e nel caso cambiare setResponse con questo. console.log deve mostrare reesponse completa
+      console.log(response.data);
       setResponseImpression(response.data.data[0].values[0].value);
     } catch (error) {
       console.error(error);
@@ -151,7 +151,7 @@ export default function HomeInsights() {
         `https://graph.facebook.com/v16.0/${storedIgID}/insights?period=${timeOption2}&metric=reach&access_token=${storedAT}`
       );
       console.log("reach:");
-      console.log(response.data); //chiedere se va bene questo formato ad Ale e nel caso cambiare setResponse con questo. console.log deve mostrare reesponse completa
+      console.log(response.data);
       setResponseReach(response.data.data[0].values[0].value);
     } catch (error) {
       console.error(error);

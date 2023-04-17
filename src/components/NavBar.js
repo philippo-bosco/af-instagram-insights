@@ -22,6 +22,7 @@ export default function Navigationbar() {
           `https://graph.facebook.com/v16.0/${storedIgID}?fields=followers_count,follows_count,media_count,name,profile_picture_url,username&access_token=${storedAT}`
         );
         setUserData(response.data);
+        secureLocalStorage.setItem("Nav", response.data.followers_count);
         console.log(response.data);
       } else {
         setIsAuth(false);
@@ -46,6 +47,7 @@ export default function Navigationbar() {
             secureLocalStorage.removeItem("isAuth");
             secureLocalStorage.removeItem("AT");
             secureLocalStorage.removeItem("IgID");
+            secureLocalStorage.removeItem("Nav");
             secureLocalStorage.removeItem("lastPost");
             // Aggiorna lo stato dell'autenticazione
             setIsAuth(false);
@@ -59,6 +61,7 @@ export default function Navigationbar() {
           secureLocalStorage.removeItem("isAuth");
           secureLocalStorage.removeItem("AT");
           secureLocalStorage.removeItem("IgID");
+          secureLocalStorage.removeItem("Nav");
           secureLocalStorage.removeItem("lastPost");
           // Aggiorna lo stato dell'autenticazione
           setIsAuth(false);

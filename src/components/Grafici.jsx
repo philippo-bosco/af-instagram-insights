@@ -17,6 +17,7 @@ import {
   BarElement,
 } from "chart.js";
 import { Pie, Line, Bar } from "react-chartjs-2";
+import secureLocalStorage from "react-secure-storage";
 
 ChartJS.register(
   ArcElement,
@@ -140,21 +141,17 @@ function LangChart({ data }) {
 }
 
 // --------- FOLLOWER COUNT ---------
-/**
- * TODO phil:
- * - aggiungere state che prenda il numero vero di follower dalla navbar in FollowerCountGraph
- */
 
 function FollowerCountGraph({ data }) {
-  const INITIAL_Y_VALUE = 300; //da cambiare con valore reale follower
+  const FINAL_Y_VALUE = secureLocalStorage.getItem("Nav");
   const labels = data[0].values.map(v => v.end_time.slice(0, 10));
-  const firstValue = data[0].values[0].value;
-  const yValues = [INITIAL_Y_VALUE + firstValue];
+  const lastValue = data[0].values[data[0].values.length - 1].value;
+  const yValues = [FINAL_Y_VALUE - lastValue];
 
-  for (let i = 1; i < data[0].values.length; i++) {
+  for (let i = data[0].values.length - 2; i >= 0; i--) {
     const value = data[0].values[i].value;
-    const previousYValue = yValues[i - 1];
-    const newYValue = previousYValue + value;
+    const nextYValue = yValues[yValues.length - 1];
+    const newYValue = nextYValue - value;
     yValues.push(newYValue);
   }
   const dataValues = {
@@ -163,7 +160,7 @@ function FollowerCountGraph({ data }) {
       {
         fill: true,
         label: data[0].title,
-        data: yValues,
+        data: yValues.reverse(),
         borderColor: "rgb(53, 162, 235)",
         backgroundColor: "rgba(53, 162, 235, 0.5)",
       },
