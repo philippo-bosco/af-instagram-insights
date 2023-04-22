@@ -31,6 +31,7 @@ function Carosello(props) {
         <Card
           style={{ width: "18rem" }}
           className="HoverDiv fadein card-front h-100"
+          fluid="true"
         >
           <Card.Header
             style={{ backgroundColor: backgroundColor, color: textColor }}
@@ -57,13 +58,12 @@ function Carosello(props) {
 
           <Card.Body
             style={{ backgroundColor: backgroundColor, color: textColor }}
-          >
-            <Card.Text align="center">{props.didascalia}</Card.Text>
-          </Card.Body>
+          ></Card.Body>
         </Card>
         <Card
           className="card-back"
           style={{ backgroundColor: backgroundColor }}
+          fluid="true"
         >
           <Card.Body className=" justify-content-center align-items-center">
             <h5 className="text-white">Dati del post</h5>
@@ -72,6 +72,7 @@ function Carosello(props) {
               numero commenti {props.numero_commenti}
             </p>
             <p className="text-white">data e ora {props.datetime}</p>
+            <p className="text-white">didascalia : {props.didascalia}</p>
           </Card.Body>
         </Card>
       </div>

@@ -1,6 +1,21 @@
 import secureLocalStorage from "react-secure-storage";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import CountUp from "react-countup";
+import { Row, Col } from "react-bootstrap";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+//import icons
+import {
+  faBookmark,
+  faVideo,
+  faEye,
+  faCircleNodes,
+  faUsers,
+} from "@fortawesome/free-solid-svg-icons";
+
+//import customs
+import "../styles/homeinsights.css";
 
 //funzione caricamento componente
 async function fetchLastPost(
@@ -22,6 +37,11 @@ async function fetchLastPost(
       reach: response.data.data[2].values[0].value,
       saved: response.data.data[3].values[0].value,
       video_views: response.data.data[4].values[0].value,
+      eng_desc: response.data.data[0].description,
+      impress_desc: response.data.data[1].description,
+      reach_desc: response.data.data[2].description,
+      saved_desc: response.data.data[3].description,
+      video_desc: response.data.data[4].description,
     };
     console.log(response.data);
     setMetricsPost(responsePostInfo);
@@ -71,13 +91,154 @@ export default function LastPostInsights() {
   //render
   return (
     metricsPost && (
-      <div>
-        <p>Engagement: {metricsPost.engagement}</p>
-        <p>Impressions: {metricsPost.impressions}</p>
-        <p>Reach: {metricsPost.reach}</p>
-        <p>Saved: {metricsPost.saved}</p>
-        <p>Video_views: {metricsPost.video_views}</p>
-      </div>
+      <Row xs={1} sm={1} md={2} lg={6} className="justify-content-between p-4 ">
+        <Col className="colorback ombra  " md={{ span: 0.5, offset: 0.5 }}>
+          <Row className="textinsightsdark  text-uppercase colorback ">
+            <center>
+              <FontAwesomeIcon
+                icon={faEye}
+                title={JSON.stringify(metricsPost.eng_desc)}
+              />{" "}
+              Engagement
+            </center>{" "}
+          </Row>
+          <CountUp
+            end={metricsPost.engagement}
+            duration={3}
+            className="valuesprofiledark"
+          />
+        </Col>
+        <Col className="colorback ombra  " md={{ span: 0.5, offset: 0.5 }}>
+          <Row className="textinsightsdark  text-uppercase colorback ">
+            <center>
+              <FontAwesomeIcon
+                icon={faUsers}
+                title={JSON.stringify(metricsPost.impress_desc)}
+              />{" "}
+              Impressions
+            </center>{" "}
+          </Row>
+          <CountUp
+            end={metricsPost.impressions}
+            duration={3}
+            className="valuesprofiledark"
+          />
+        </Col>
+        <Col className="colorback ombra   " md={{ span: 0.5, offset: 0.5 }}>
+          <Row className="textinsightsdark  text-uppercase colorback ">
+            <center>
+              {" "}
+              <FontAwesomeIcon
+                icon={faCircleNodes}
+                title={JSON.stringify(metricsPost.reach_desc)}
+              />{" "}
+              Reach
+            </center>
+          </Row>{" "}
+          <CountUp
+            end={metricsPost.reach}
+            duration={3}
+            className="valuesprofiledark"
+          />
+        </Col>
+        <Col className="colorback ombra  " md={{ span: 0.5, offset: 0.5 }}>
+          <Row className="textinsightsdark  text-uppercase colorback ">
+            <center>
+              <FontAwesomeIcon
+                icon={faBookmark}
+                title={JSON.stringify(metricsPost.saved_desc)}
+              />{" "}
+              Saved
+            </center>
+          </Row>{" "}
+          <CountUp
+            end={metricsPost.saved}
+            duration={3}
+            className="valuesprofiledark"
+          />
+        </Col>
+        <Col className="colorback ombra " md={{ span: 0.5, offset: 0.5 }}>
+          <Row className="textinsightsdark  text-uppercase colorback ">
+            <center>
+              <FontAwesomeIcon
+                icon={faVideo}
+                title={JSON.stringify(metricsPost.video_desc)}
+              />{" "}
+              Video views
+            </center>
+          </Row>{" "}
+          <CountUp
+            end={metricsPost.video_views}
+            duration={3}
+            className="valuesprofiledark"
+          />
+        </Col>
+      </Row>
     )
   );
 }
+
+/*
+ *  //render
+  return (
+    metricsPost && (
+      <Row xs={1} sm={1} md={2} lg={5} className="justify-content-between p-4 ">
+        <Col className="colorback ombra  " md={{ span: 0.5, offset: 0.5 }}>
+          <Row className="textinsightsdark  text-uppercase colorback ">
+          
+            <center><FontAwesomeIcon
+            icon={faCircleNodes}
+            title={JSON.stringify(metricsPost.eng_desc)}
+          />{" "}Impressions</center>{" "}
+          </Row>
+          <CountUp
+            end={metricsPost.impressions}
+            duration={3}
+            className="valuesprofiledark"
+          />
+        </Col>
+        <Col className="colorback ombra   " md={{ span: 0.5, offset: 0.5 }}>
+          <Row className="textinsightsdark  text-uppercase colorback ">
+            <center>          <FontAwesomeIcon
+            icon={faUsers}
+            title={JSON.stringify(metricsPost.reach_desc)}
+          />{" "}Reach</center>
+          </Row>{" "}
+          <CountUp
+            end={metricsPost.reach}
+            duration={3}
+            className="valuesprofiledark"
+          />
+        </Col>
+        <Col className="colorback ombra  " md={{ span: 0.5, offset: 0.5 }}>
+          <Row className="textinsightsdark  text-uppercase colorback ">
+            <center><FontAwesomeIcon
+            icon={faBookmark}
+            title={JSON.stringify(metricsPost.saved_desc)}
+          />{" "}Saved</center>
+          </Row>{" "}
+          <CountUp
+            end={metricsPost.saved}
+            duration={3}
+            className="valuesprofiledark"
+          />
+        </Col>
+        <Col className="colorback ombra " md={{ span: 0.5, offset: 0.5 }}>
+          <Row className="textinsightsdark  text-uppercase colorback ">
+            <center><FontAwesomeIcon
+            icon={faVideo}
+            title={JSON.stringify(metricsPost.video_desc)}
+          />{" "}Video views</center>
+          </Row>{" "}
+          <CountUp
+            end={metricsPost.video_views}
+            duration={3}
+            className="valuesprofiledark"
+          />
+        </Col>
+      </Row>
+    )
+  );
+}
+
+ */

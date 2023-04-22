@@ -5,6 +5,12 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import Container from "react-bootstrap/Container";
 import { Button, Navbar, Nav } from "react-bootstrap";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUser } from "@fortawesome/free-regular-svg-icons";
+import {
+  faChartLine,
+  faRightFromBracket,
+} from "@fortawesome/free-solid-svg-icons";
 
 export default function Navigationbar() {
   const navigate = useNavigate();
@@ -120,10 +126,16 @@ export default function Navigationbar() {
               </Nav>
               <Nav>
                 <Link to="/">
-                  <Button className="button">Profilo</Button>
+                  <Button className="button">
+                    <FontAwesomeIcon icon={faUser} />
+                    <span> </span>Profilo
+                  </Button>
                 </Link>
                 <Link to="/stats">
-                  <Button className="button">Insights</Button>
+                  <Button className="button">
+                    <FontAwesomeIcon icon={faChartLine} />
+                    <span> </span>Insights
+                  </Button>
                 </Link>
                 <Button
                   className="button mb-3 floatright"
@@ -131,13 +143,17 @@ export default function Navigationbar() {
                   disabled={isLoading}
                   variant="outline-light"
                 >
-                  {isLoading && (
+                  {isLoading ? (
                     <span
                       className="spinner-border spinner-border-sm mr-2"
                       role="status"
                       aria-hidden="true"
                     ></span>
-                  )}
+                  ) : (
+                    <span>
+                      <FontAwesomeIcon icon={faRightFromBracket} />{" "}
+                    </span>
+                  )}{" "}
                   Logout
                 </Button>
               </Nav>

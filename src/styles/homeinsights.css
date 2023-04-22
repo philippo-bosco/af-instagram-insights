@@ -1,0 +1,83 @@
+.valuesprofile {
+  color: #e2dfdf;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 500%;
+  text-align: center !important;
+}
+.textinsights {
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  color: #e2dfdf !important;
+  text-align: center !important;
+}
+.h3 {
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  color: #e2dfdf !important;
+  text-align: center !important;
+}
+.last1 {
+  background: #813405 !important;
+  opacity: 0.7;
+}
+.last2 {
+  background: #d45113 !important;
+  opacity: 0.7;
+}
+.last3 {
+  background: #f9a03f !important;
+  opacity: 0.7;
+}
+.last4 {
+  background: #f8dda4 !important;
+  opacity: 0.7;
+}
+.last5 {
+  background: #ddf9c1 !important;
+  opacity: 0.7;
+}
+.valuesprofiledark {
+  color: #555555;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 150%;
+  text-align: center !important;
+  font-weight: normal !important ;
+}
+.textinsightsdark {
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  color: #555555 !important;
+  text-align: center !important;
+  font-weight: bold;
+}
+.impressioncolor {
+  background: #197bbd !important;
+  opacity: 0.7;
+}
+.impressiontext {
+  font-size: 150% !important;
+}
+.reachcolor {
+  background-color: #8ea604 !important;
+  opacity: 0.7;
+}
+.colorprofilo {
+  background-color: #f5bb00 !important;
+  opacity: 0.7;
+}
+.colorluoghi {
+  background-color: #ec9f05 !important;
+  opacity: 0.7;
+}
+.colormail {
+  background-color: #bf3100 !important;
+  opacity: 0.7;
+}
+.colorback {
+  background-color: #e9e9e9 !important;
+  border-color: #555555 !important;
+  border-width: 10%;
+  border-radius: 10px;
+}
+@media screen {
+  .ombra {
+    box-shadow: 4px 5px 9px #555555;
+  }
+}

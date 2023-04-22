@@ -12,17 +12,16 @@ import {
   LineElement,
   Title,
   Filler,
-  Legend,
   BarController,
   BarElement,
 } from "chart.js";
 import { Pie, Line, Bar } from "react-chartjs-2";
 import secureLocalStorage from "react-secure-storage";
+import chroma from "chroma-js";
 
 ChartJS.register(
   ArcElement,
   Tooltip,
-  Legend,
   Filler,
   CategoryScale,
   LinearScale,
@@ -39,29 +38,19 @@ ChartJS.register(
 function CityGraph({ data }) {
   const cities = Object.keys(data[0].values[0].value);
   const quantities = Object.values(data[0].values[0].value);
-
+  var colors = [];
+  for (var i = 0; i < cities.length; i++) {
+    var randomColor = chroma.random();
+    colors.push("rgba(" + randomColor.rgb() + ",0.7)");
+  }
   const chartData = {
     labels: cities,
     datasets: [
       {
-        label: "# of Votes",
+        label: "profili",
         data: quantities,
-        backgroundColor: [
-          "rgba(255, 99, 132, 0.2)",
-          "rgba(54, 162, 235, 0.2)",
-          "rgba(255, 206, 86, 0.2)",
-          "rgba(75, 192, 192, 0.2)",
-          "rgba(153, 102, 255, 0.2)",
-          "rgba(255, 159, 64, 0.2)",
-        ],
-        borderColor: [
-          "rgba(255, 99, 132, 1)",
-          "rgba(54, 162, 235, 1)",
-          "rgba(255, 206, 86, 1)",
-          "rgba(75, 192, 192, 1)",
-          "rgba(153, 102, 255, 1)",
-          "rgba(255, 159, 64, 1)",
-        ],
+        backgroundColor: colors,
+        borderColor: colors,
         borderWidth: 1,
       },
     ],
@@ -73,35 +62,31 @@ function CityGraph({ data }) {
 function CountryGraph({ data }) {
   const countries = Object.keys(data[1].values[0].value);
   const quantities = Object.values(data[1].values[0].value);
+  var colors = [];
 
+  for (var i = 0; i < countries.length; i++) {
+    var randomColor = chroma.random();
+    colors.push("rgba(" + randomColor.rgb() + ",0.7)");
+  }
   const chartData = {
     labels: countries,
     datasets: [
       {
-        label: "# of Votes",
+        label: "profili",
         data: quantities,
-        backgroundColor: [
-          "rgba(255, 99, 132, 0.2)",
-          "rgba(54, 162, 235, 0.2)",
-          "rgba(255, 206, 86, 0.2)",
-          "rgba(75, 192, 192, 0.2)",
-          "rgba(153, 102, 255, 0.2)",
-          "rgba(255, 159, 64, 0.2)",
-        ],
-        borderColor: [
-          "rgba(255, 99, 132, 1)",
-          "rgba(54, 162, 235, 1)",
-          "rgba(255, 206, 86, 1)",
-          "rgba(75, 192, 192, 1)",
-          "rgba(153, 102, 255, 1)",
-          "rgba(255, 159, 64, 1)",
-        ],
+        backgroundColor: colors,
+
+        borderColor: ["rgba(00, 00, 00,1)"],
         borderWidth: 1,
       },
     ],
   };
 
-  return <Pie data={chartData} />;
+  return (
+    <>
+      <Pie data={chartData} />
+    </>
+  );
 }
 
 // --------- LANGUAGE COUNT ---------
@@ -109,29 +94,19 @@ function CountryGraph({ data }) {
 function LangChart({ data }) {
   const languages = Object.keys(data[3].values[0].value);
   const quantities = Object.values(data[3].values[0].value);
-
+  var colors = [];
+  for (var i = 0; i < languages.length; i++) {
+    var randomColor = chroma.random();
+    colors.push("rgba(" + randomColor.rgb() + ",0.7)");
+  }
   const chartData = {
     labels: languages,
     datasets: [
       {
-        label: "# of Votes",
+        label: "profili",
         data: quantities,
-        backgroundColor: [
-          "rgba(255, 99, 132, 0.2)",
-          "rgba(54, 162, 235, 0.2)",
-          "rgba(255, 206, 86, 0.2)",
-          "rgba(75, 192, 192, 0.2)",
-          "rgba(153, 102, 255, 0.2)",
-          "rgba(255, 159, 64, 0.2)",
-        ],
-        borderColor: [
-          "rgba(255, 99, 132, 1)",
-          "rgba(54, 162, 235, 1)",
-          "rgba(255, 206, 86, 1)",
-          "rgba(75, 192, 192, 1)",
-          "rgba(153, 102, 255, 1)",
-          "rgba(255, 159, 64, 1)",
-        ],
+        backgroundColor: colors,
+        borderColor: colors,
         borderWidth: 1,
       },
     ],
@@ -154,6 +129,7 @@ function FollowerCountGraph({ data }) {
     const newYValue = nextYValue - value;
     yValues.push(newYValue);
   }
+  const rgbColor = chroma.random().rgb();
   const dataValues = {
     labels: labels,
     datasets: [
@@ -161,8 +137,9 @@ function FollowerCountGraph({ data }) {
         fill: true,
         label: data[0].title,
         data: yValues.reverse(),
-        borderColor: "rgb(53, 162, 235)",
-        backgroundColor: "rgba(53, 162, 235, 0.5)",
+
+        borderColor: "rgba(" + rgbColor + ")",
+        backgroundColor: "rgba(226, 223, 223, 0.2)",
       },
     ],
   };
@@ -191,15 +168,15 @@ function GenderAgeChart({ data }) {
 
   // Creiamo i dataset per il grafico
   const datasets = [
-    { label: "M", backgroundColor: "rgba(255, 99, 132, 0.5)", data: [] },
+    { label: "Maschio", backgroundColor: "rgba(0, 115, 255)", data: [] },
     {
-      label: "F",
-      backgroundColor: "rgba(54, 162, 235, 0.5)",
+      label: "Femmina",
+      backgroundColor: "rgba(252, 121, 226)",
       data: [],
     },
     {
-      label: "U",
-      backgroundColor: "rgba(255, 206, 86, 0.5)",
+      label: "Non Specificato",
+      backgroundColor: "rgba(99, 0, 80)",
       data: [],
     },
   ];

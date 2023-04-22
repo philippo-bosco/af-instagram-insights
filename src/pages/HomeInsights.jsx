@@ -1,9 +1,27 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import secureLocalStorage from "react-secure-storage";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Container, Row, Col } from "react-bootstrap";
+import CountUp from "react-countup";
+
+//import icons
+import {
+  faLanguage,
+  faEarthAmericas,
+  faPersonHalfDress,
+  faBuildingUser,
+  faLocationDot,
+  faEnvelope,
+  faUsers,
+  faEye,
+  faUserPlus,
+  faArrowPointer,
+} from "@fortawesome/free-solid-svg-icons";
 
 //import custom
 import LastPostInsights from "../components/LastPost";
+import "../styles/homeinsights.css";
 import {
   CityGraph,
   CountryGraph,
@@ -13,7 +31,6 @@ import {
 } from "../components/Grafici";
 
 /** TODO phil:
- * - eseguire controllo persistenza scheda a refresh pagina
  * - eseguire le richieste a periodo variabile con default "day" al caricamento del componente
  */
 
@@ -62,6 +79,9 @@ export default function HomeInsights() {
         profile_views: response.data.data[0].values[1].value,
         geo_clicks: response.data.data[1].values[1].value,
         email_contacts: response.data.data[2].values[1].value,
+        profile_desc: JSON.stringify(response.data.data[0].description),
+        geo_desc: JSON.stringify(response.data.data[1].description),
+        email_desc: JSON.stringify(response.data.data[2].description),
       };
       setResponseDay(responseDayInfo);
       console.log(
@@ -138,7 +158,11 @@ export default function HomeInsights() {
       );
       console.log("profile impression:");
       console.log(response.data);
-      setResponseImpression(response.data.data[0].values[0].value);
+      const responseInfo = {
+        value: response.data.data[0].values[0].value,
+        description: response.data.data[0].description,
+      };
+      setResponseImpression(responseInfo);
     } catch (error) {
       console.error(error);
     }
@@ -152,98 +176,218 @@ export default function HomeInsights() {
       );
       console.log("reach:");
       console.log(response.data);
-      setResponseReach(response.data.data[0].values[0].value);
+      const responseInfo = {
+        value: response.data.data[0].values[0].value,
+        description: response.data.data[0].description,
+      };
+      setResponseReach(responseInfo);
     } catch (error) {
       console.error(error);
     }
   };
 
-  //stringify section (solo per mostrare a video, verrà rimossa)
-  //const parsedFollowerCount = JSON.stringify(responseFollower);
-  //const parsedLifetime = JSON.stringify(responseLifeTime);
-  //const parsedDay = JSON.stringify(responseDay);
-  //const parsedImpression = JSON.stringify(responseImpression);
-  //const parsedReach = JSON.stringify(responseReach);
-
+  //render
   return isLoading ? (
     <div>
       <p>Loading...</p>
     </div>
   ) : (
-    <div>
-      <div id="follower-count">
-        <h3>Richiesta follower Count (console):</h3>
-        <select value={timeframe} onChange={handleTimeframeChange}>
-          <option value="today">Oggi</option>
-          <option value="week">Una settimana</option>
-          <option value="month">Un mese</option>
-        </select>
-        <button onClick={handleFollowerCountReq}>Invia richiesta</button>
-        {responseFollower && (
-          <div style={{ width: "600px", height: "600px" }}>
-            <FollowerCountGraph data={responseFollower.data} />
-          </div>
+    <Container fluid className="textinsights  text-uppercase">
+      <LastPostInsights />
+      <Row xs={1} sm={1} md={2} lg={3} className="justify-content-between p-4">
+        <Col
+          className="colorback textinsightsdark ombra"
+          md={{ span: 0.5, offset: 0.5 }}
+        >
+          <Row className="colorback textinsightsdark">
+            <center>
+              {responseImpression && (
+                <FontAwesomeIcon
+                  icon={faEye}
+                  title={JSON.stringify(responseImpression.description)}
+                />
+              )}{" "}
+              richiesta Profile impressions
+            </center>
+          </Row>
+          <select value={timeOption1} onChange={handleTimeOptionChange1}>
+            <option value="day">Oggi</option>
+            <option value="week">Una settimana</option>
+            <option value="days_28">Un mese</option>
+          </select>
+          <button onClick={handleImpressionsReq}>Invia richiesta</button>
+          <br></br>
+          {responseImpression && (
+            <CountUp
+              end={responseImpression.value}
+              duration={3}
+              className="valuesprofiledark  impressiontext"
+            />
+          )}
+        </Col>
+        <Col
+          className="colorback textinsightsdark ombra"
+          md={{ span: 0.5, offset: 0.5 }}
+        >
+          <Row className="colorback textinsightsdark">
+            <center>
+              {responseReach && (
+                <FontAwesomeIcon
+                  icon={faUsers}
+                  title={JSON.stringify(responseReach.description)}
+                />
+              )}{" "}
+              richiesta Profile reach
+            </center>
+          </Row>
+          <select value={timeOption2} onChange={handleTimeOptionChange2}>
+            <option value="day">Oggi</option>
+            <option value="week">Una settimana</option>
+            <option value="days_28">Un mese</option>
+          </select>
+          <button onClick={handleReachReq}>Invia richiesta</button>
+          <br></br>
+          {responseReach && (
+            <CountUp
+              end={responseReach.value}
+              duration={3}
+              className="valuesprofiledark "
+            />
+          )}
+        </Col>
+      </Row>
+      <Row xs={1} sm={1} md={2} lg={5} className="justify-content-between p-4">
+        {responseDay && (
+          <>
+            <Col className="colorback ombra" md={{ span: 0.9, offset: 0.9 }}>
+              <Row className="textinsightsdark text-uppercase text-md-auto colorback">
+                <center>
+                  {" "}
+                  <FontAwesomeIcon
+                    icon={faArrowPointer}
+                    title={responseDay.profile_desc}
+                  />{" "}
+                  Visite al profilo <br></br>giornaliere
+                </center>
+              </Row>{" "}
+              <CountUp
+                end={responseDay.profile_views}
+                duration={5}
+                className="valuesprofiledark colorback"
+              />
+            </Col>
+            <Col className="colorback ombra" md={{ span: 0.9, offset: 0.9 }}>
+              <Row className="textinsightsdark text-uppercase text-center colorback">
+                <center>
+                  {" "}
+                  <FontAwesomeIcon
+                    icon={faLocationDot}
+                    title={responseDay.geo_desc}
+                  />{" "}
+                  Click luoghi <br></br>giornaliere
+                </center>
+              </Row>{" "}
+              <CountUp
+                end={responseDay.geo_click}
+                duration={5}
+                className="valuesprofiledark colorback"
+              />{" "}
+            </Col>
+            <Col className="colorback ombra" md={{ span: 0.9, offset: 0.9 }}>
+              <Row className="textinsightsdark text-uppercase text-center colorback">
+                <center>
+                  <FontAwesomeIcon
+                    icon={faEnvelope}
+                    title={responseDay.email_desc}
+                  />{" "}
+                  Contatti email <br></br>giornaliere
+                </center>
+              </Row>{" "}
+              <CountUp
+                end={responseDay.email_contacts}
+                duration={5}
+                className="valuesprofiledark colorback"
+              />{" "}
+            </Col>
+          </>
         )}
-      </div>
-      <div id="impression">
-        <h3>richiesta Profile impressions (console):</h3>
-        <select value={timeOption1} onChange={handleTimeOptionChange1}>
-          <option value="day">Oggi</option>
-          <option value="week">Una settimana</option>
-          <option value="days_28">Un mese</option>
-        </select>
-        <button onClick={handleImpressionsReq}>Invia richiesta</button>
-        <div>
-          <p>{responseImpression}</p>
-        </div>
-      </div>
-      <div id="reach">
-        <h3>richiesta Profile reach (console):</h3>
-        <select value={timeOption2} onChange={handleTimeOptionChange2}>
-          <option value="day">Oggi</option>
-          <option value="week">Una settimana</option>
-          <option value="days_28">Un mese</option>
-        </select>
-        <button onClick={handleReachReq}>Invia richiesta</button>
-        <div>
-          <p>{responseReach}</p>
-        </div>
-      </div>
+      </Row>
       {responseLifeTime && (
-        <div id="lifetime">
-          <h3> richiesta al caricamento del componente (console):</h3>
-          <div>
-            <h4>LifeTime request:</h4>
-            <div style={{ width: "600px", height: "600px" }}>
+        <>
+          <Row
+            xs={1}
+            sm={1}
+            md={2}
+            lg={4}
+            className="d-flex flex-wrap justify-content-center p-4 "
+            fluid="true"
+          >
+            <Col>
+              <h3>
+                <FontAwesomeIcon
+                  icon={faBuildingUser}
+                  title={JSON.stringify(responseLifeTime.data[0].description)}
+                />{" "}
+                Grafico delle città
+              </h3>
               <CityGraph data={responseLifeTime.data} />
-            </div>
-            <div style={{ width: "600px", height: "600px" }}>
+            </Col>
+            <Col>
+              <h3>
+                <FontAwesomeIcon
+                  icon={faEarthAmericas}
+                  title={JSON.stringify(responseLifeTime.data[1].description)}
+                />{" "}
+                Grafico delle Nazioni
+              </h3>
               <CountryGraph data={responseLifeTime.data} />
-            </div>
-            <div style={{ width: "600px", height: "600px" }}>
-              <GenderAgeChart data={responseLifeTime.data} />
-            </div>
-            <div style={{ width: "600px", height: "600px" }}>
+            </Col>
+            <Col>
+              <h3>
+                <FontAwesomeIcon
+                  icon={faLanguage}
+                  title={JSON.stringify(responseLifeTime.data[3].description)}
+                />{" "}
+                Grafico delle lingue
+              </h3>
               <LangChart data={responseLifeTime.data} />
-            </div>
-          </div>
-          <div>
-            <br />
-            <h4>Day request:</h4>
-            {responseDay && (
-              <div>
-                <p>Visite al profilo: {responseDay.profile_views}</p>
-                <p>Click luoghi: {responseDay.geo_clicks}</p>
-                <p>Contatti email: {responseDay.email_contacts}</p>
-              </div>
-            )}
-          </div>
-          <div>
-            <h4>Last Post request:</h4>
-            <LastPostInsights />
-          </div>
-        </div>
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              <h3>
+                {responseFollower && (
+                  <FontAwesomeIcon
+                    icon={faUserPlus}
+                    title={JSON.stringify(responseFollower.data[0].description)}
+                  />
+                )}{" "}
+                Richiesta follower Count:
+              </h3>
+              <select value={timeframe} onChange={handleTimeframeChange}>
+                <option value="today">Oggi</option>
+                <option value="week">Una settimana</option>
+                <option value="month">Un mese</option>
+              </select>
+              <button onClick={handleFollowerCountReq}>Invia richiesta</button>
+              {responseFollower && (
+                <FollowerCountGraph data={responseFollower.data} />
+              )}
+            </Col>
+            <Col>
+              <h3>
+                {" "}
+                <FontAwesomeIcon
+                  icon={faPersonHalfDress}
+                  title={JSON.stringify(responseLifeTime.data[2].description)}
+                />{" "}
+                Grafico di genere per età
+              </h3>
+              <GenderAgeChart data={responseLifeTime.data} />
+            </Col>
+          </Row>
+        </>
       )}
-    </div>
+    </Container>
   );
 }

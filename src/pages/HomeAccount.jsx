@@ -6,6 +6,7 @@ import { Row, Col, Container } from "react-bootstrap";
 //import customs
 import Post from "../components/Post";
 import Carosello from "../components/Carousel";
+import Footer from "../components/Footer";
 
 export default function Home() {
   const storedIgID = secureLocalStorage.getItem("IgID");
@@ -39,53 +40,49 @@ export default function Home() {
 
   //render
   return isAuth ? (
-    <Container fluid>
-      <Row
-        xs={1}
-        sm={2}
-        md={3}
-        lg={4}
-        className="d-flex flex-wrap justify-content-center "
-        fluid="true"
-      >
-        {userFeed?.data?.map(post => (
-          <Container key={post.id} className="align-self-start">
-            <Col
-              key={post.id}
-              className="h-100 col-md-auto align-self-start"
-              fluid="true"
-            >
-              {post.media_type === "VIDEO" ? (
-                <Post
-                  src={post.media_url}
-                  didascalia={post.caption}
-                  video={true}
-                  numero_commenti={post.comments_count}
-                  numero_like={post.like_count}
-                  datetime={post.timestamp}
-                />
-              ) : post.media_type === "CAROUSEL_ALBUM" ? (
-                <Carosello
-                  src={post.children.data}
-                  didascalia={post.caption}
-                  numero_commenti={post.comments_count}
-                  numero_like={post.like_count}
-                  datetime={post.timestamp}
-                />
-              ) : (
-                <Post
-                  src={post.media_url}
-                  didascalia={post.caption}
-                  numero_commenti={post.comments_count}
-                  numero_like={post.like_count}
-                  datetime={post.timestamp}
-                />
-              )}
-            </Col>
-          </Container>
-        ))}
-      </Row>
-    </Container>
+    <>
+      <Container fluid>
+        <Row xs={1} sm={2} md={3} lg={4}>
+          {userFeed?.data?.map(post => (
+            <Container key={post.id}>
+              <Col
+                key={post.id}
+                className=" col-md-auto align-self-start "
+                fluid="true"
+              >
+                {post.media_type === "VIDEO" ? (
+                  <Post
+                    src={post.media_url}
+                    didascalia={post.caption}
+                    video={true}
+                    numero_commenti={post.comments_count}
+                    numero_like={post.like_count}
+                    datetime={post.timestamp}
+                  />
+                ) : post.media_type === "CAROUSEL_ALBUM" ? (
+                  <Carosello
+                    src={post.children.data}
+                    didascalia={post.caption}
+                    numero_commenti={post.comments_count}
+                    numero_like={post.like_count}
+                    datetime={post.timestamp}
+                  />
+                ) : (
+                  <Post
+                    src={post.media_url}
+                    didascalia={post.caption}
+                    numero_commenti={post.comments_count}
+                    numero_like={post.like_count}
+                    datetime={post.timestamp}
+                  />
+                )}
+              </Col>
+            </Container>
+          ))}
+        </Row>
+      </Container>
+      <Footer />
+    </>
   ) : (
     <div></div>
   );

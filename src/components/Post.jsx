@@ -42,6 +42,7 @@ function Post(props) {
                   numero commenti {props.numero_commenti}
                 </p>
                 <p className="text-white">data e ora {props.datetime}</p>
+                <p className="text-white">didascalia : {props.didascalia}</p>
               </div>
             </Card.Body>
           </Card>
@@ -54,7 +55,7 @@ function Post(props) {
                 >
                   Video
                 </Card.Header>
-                <video controls>
+                <video controls autoPlay loop muted>
                   <source src={props.src} type="video/mp4" />
                 </video>
               </>
@@ -75,9 +76,7 @@ function Post(props) {
             )}
             <Card.Body
               style={{ backgroundColor: backgroundColor, color: textColor }}
-            >
-              <Card.Text align="center">{props.didascalia}</Card.Text>
-            </Card.Body>
+            ></Card.Body>
           </Card>
         </div>
       </Fade>
