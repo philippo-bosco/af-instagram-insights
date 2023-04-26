@@ -214,7 +214,7 @@ export default function HomeInsights() {
                   icon={faEye}
                   className="blu"
                   title={
-                    responseReach &&
+                    responseImpression &&
                     JSON.stringify(responseImpression.description)
                   }
                 />{" "}
