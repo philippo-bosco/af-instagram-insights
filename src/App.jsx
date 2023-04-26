@@ -10,16 +10,6 @@ import PageNotFound from "./pages/PageNotFound";
 import NavigationBar from "./components/NavBar";
 import HomeInsights from "./pages/HomeInsights";
 
-/*
- * TODO phil:
- * - aggiungere loading spinenr in tutte le pagine
- * - sistemare doppie richieste HomeAccount
- * - sistermare doppie richieste HomeInsights
- * - sistemare doppie richieste PrivateRoutes
- * - sistemare doppie richieste navBar
- * - sistemare doppie richieste LastPost
- */
-
 export default function App() {
   return (
     <>
