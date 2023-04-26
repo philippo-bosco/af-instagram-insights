@@ -2,11 +2,11 @@ import React, { useState, useEffect } from "react";
 import secureLocalStorage from "react-secure-storage";
 import axios from "axios";
 import { Row, Col, Container } from "react-bootstrap";
+import Footer from "../components/Footer";
 
 //import customs
 import Post from "../components/Post";
 import Carosello from "../components/Carousel";
-import Footer from "../components/Footer";
 
 export default function Home() {
   const storedIgID = secureLocalStorage.getItem("IgID");
@@ -81,7 +81,7 @@ export default function Home() {
           ))}
         </Row>
       </Container>
-      <Footer />
+      <Footer></Footer>
     </>
   ) : (
     <div></div>

@@ -15,8 +15,14 @@ export default function Footer() {
   }, [storedAT, storedIgID]);
 
   return (
-    <div className="footer">
-      {isAuthenticated ? <p>{timestamp}</p> : <p>Powered by Phil & Ale</p>}
+    <div className="footer textinsightsdark border-top">
+      {isAuthenticated ? (
+        <div>
+          last login {timestamp} <br></br>Powered by Phil & Ale{" "}
+        </div>
+      ) : (
+        <div>Powered by Phil & Ale</div>
+      )}
     </div>
   );
 }

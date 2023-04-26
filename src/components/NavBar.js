@@ -5,6 +5,8 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import Container from "react-bootstrap/Container";
 import { Button, Navbar, Nav } from "react-bootstrap";
+
+//import icons
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-regular-svg-icons";
 import {
@@ -94,6 +96,7 @@ export default function Navigationbar() {
             padding: "0",
             backgroundColor: "#000",
           }}
+          className="textinsightsdark"
         >
           <Container
             fluid
@@ -107,20 +110,20 @@ export default function Navigationbar() {
                 height="50"
                 className="d-inline-block align-top rounded-circle"
               />
-              <span style={{ marginLeft: "10px" }}>
+              <span style={{ marginLeft: "10px" }} className="textinsightsdark">
                 Welcome {userData.name}
               </span>
             </Navbar.Brand>
             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
             <Navbar.Collapse id="responsive-navbar-nav">
               <Nav className="me-auto">
-                <Nav.Link className="navbarStats" disabled>
+                <Nav.Link className="navbarStats textinsightsdark" disabled>
                   post {userData.media_count}
                 </Nav.Link>
-                <Nav.Link className="navbarStats" disabled>
+                <Nav.Link className="navbarStats textinsightsdark" disabled>
                   seguiti {userData.follows_count}
                 </Nav.Link>
-                <Nav.Link className="navbarStats" disabled>
+                <Nav.Link className="navbarStats textinsightsdark" disabled>
                   follower {userData.followers_count}
                 </Nav.Link>
               </Nav>
@@ -131,6 +134,7 @@ export default function Navigationbar() {
                     <span> </span>Profilo
                   </Button>
                 </Link>
+
                 <Link to="/stats">
                   <Button className="button">
                     <FontAwesomeIcon icon={faChartLine} />
@@ -138,10 +142,10 @@ export default function Navigationbar() {
                   </Button>
                 </Link>
                 <Button
-                  className="button mb-3 floatright"
+                  className="button mb-3 floatright textinsightsdark"
                   onClick={handleLogout}
                   disabled={isLoading}
-                  variant="outline-light"
+                  variant="outline-dark"
                 >
                   {isLoading ? (
                     <span

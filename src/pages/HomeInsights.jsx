@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import secureLocalStorage from "react-secure-storage";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Container, Row, Col } from "react-bootstrap";
+import { Container, Row, Col, Button } from "react-bootstrap";
 import CountUp from "react-countup";
 
 //import icons
@@ -29,6 +29,7 @@ import {
   FollowerCountGraph,
   GenderAgeChart,
 } from "../components/Grafici";
+import Footer from "../components/Footer";
 
 /** TODO phil:
  * - eseguire le richieste a periodo variabile con default "day" al caricamento del componente
@@ -192,202 +193,272 @@ export default function HomeInsights() {
       <p>Loading...</p>
     </div>
   ) : (
-    <Container fluid className="textinsights  text-uppercase">
-      <LastPostInsights />
-      <Row xs={1} sm={1} md={2} lg={3} className="justify-content-between p-4">
-        <Col
-          className="colorback textinsightsdark ombra"
-          md={{ span: 0.5, offset: 0.5 }}
+    <>
+      <Container fluid className="textinsights  text-uppercase">
+        <LastPostInsights />
+
+        <Row
+          xs={1}
+          sm={1}
+          md={2}
+          lg={3}
+          className="justify-content-between p-4"
         >
-          <Row className="colorback textinsightsdark">
-            <center>
-              {responseImpression && (
+          <Col
+            className="colorback textinsightsdark ombra"
+            md={{ span: 0.5, offset: 0.5 }}
+          >
+            <Row className="colorback  textprofiledark">
+              <center>
                 <FontAwesomeIcon
                   icon={faEye}
-                  title={JSON.stringify(responseImpression.description)}
-                />
-              )}{" "}
-              richiesta Profile impressions
-            </center>
-          </Row>
-          <select value={timeOption1} onChange={handleTimeOptionChange1}>
-            <option value="day">Oggi</option>
-            <option value="week">Una settimana</option>
-            <option value="days_28">Un mese</option>
-          </select>
-          <button onClick={handleImpressionsReq}>Invia richiesta</button>
-          <br></br>
-          {responseImpression && (
-            <CountUp
-              end={responseImpression.value}
-              duration={3}
-              className="valuesprofiledark  impressiontext"
-            />
-          )}
-        </Col>
-        <Col
-          className="colorback textinsightsdark ombra"
-          md={{ span: 0.5, offset: 0.5 }}
-        >
-          <Row className="colorback textinsightsdark">
-            <center>
-              {responseReach && (
+                  className="blu"
+                  title={
+                    responseReach &&
+                    JSON.stringify(responseImpression.description)
+                  }
+                />{" "}
+                Profile impressions
+              </center>
+            </Row>
+            <select
+              value={timeOption1}
+              onChange={handleTimeOptionChange1}
+              className="dropdown"
+            >
+              <option value="day">Oggi</option>
+              <option value="week">Una settimana</option>
+              <option value="days_28">Un mese</option>
+            </select>
+            <Button
+              className="button mb-3 floatright textprofiledark"
+              onClick={handleImpressionsReq}
+              disabled={isLoading}
+              variant="outline-dark"
+            >
+              INVIA RICHIESTA
+            </Button>
+            <br></br>
+
+            {responseImpression && (
+              <CountUp
+                end={responseImpression.value}
+                duration={3}
+                className="valuesprofiledark  impressiontext"
+              />
+            )}
+          </Col>
+          <Col
+            className="colorback textinsightsdark ombra"
+            md={{ span: 0.5, offset: 0.5 }}
+          >
+            <Row className="colorback textprofiledark">
+              <center>
                 <FontAwesomeIcon
                   icon={faUsers}
-                  title={JSON.stringify(responseReach.description)}
-                />
-              )}{" "}
-              richiesta Profile reach
-            </center>
-          </Row>
-          <select value={timeOption2} onChange={handleTimeOptionChange2}>
-            <option value="day">Oggi</option>
-            <option value="week">Una settimana</option>
-            <option value="days_28">Un mese</option>
-          </select>
-          <button onClick={handleReachReq}>Invia richiesta</button>
-          <br></br>
-          {responseReach && (
-            <CountUp
-              end={responseReach.value}
-              duration={3}
-              className="valuesprofiledark "
-            />
-          )}
-        </Col>
-      </Row>
-      <Row xs={1} sm={1} md={2} lg={5} className="justify-content-between p-4">
-        {responseDay && (
-          <>
-            <Col className="colorback ombra" md={{ span: 0.9, offset: 0.9 }}>
-              <Row className="textinsightsdark text-uppercase text-md-auto colorback">
-                <center>
-                  {" "}
-                  <FontAwesomeIcon
-                    icon={faArrowPointer}
-                    title={responseDay.profile_desc}
-                  />{" "}
-                  Visite al profilo <br></br>giornaliere
-                </center>
-              </Row>{" "}
+                  className="verde"
+                  title={
+                    responseReach && JSON.stringify(responseReach.description)
+                  }
+                />{" "}
+                Profile reach
+              </center>
+            </Row>
+
+            <select
+              value={timeOption2}
+              onChange={handleTimeOptionChange2}
+              className="dropdown"
+            >
+              <option value="day">Oggi</option>
+              <option value="week">Una settimana</option>
+              <option value="days_28">Un mese</option>
+            </select>
+            <Button
+              className="button mb-3 floatright textprofiledark"
+              onClick={handleReachReq}
+              disabled={isLoading}
+              variant="outline-dark"
+            >
+              INVIA RICHIESTA
+            </Button>
+            <br></br>
+            {responseReach && (
               <CountUp
-                end={responseDay.profile_views}
-                duration={5}
-                className="valuesprofiledark colorback"
+                end={responseReach.value}
+                duration={3}
+                className="valuesprofiledark "
               />
-            </Col>
-            <Col className="colorback ombra" md={{ span: 0.9, offset: 0.9 }}>
-              <Row className="textinsightsdark text-uppercase text-center colorback">
-                <center>
+            )}
+          </Col>
+        </Row>
+        <Row
+          xs={1}
+          sm={1}
+          md={2}
+          lg={5}
+          className="justify-content-between p-4"
+        >
+          {responseDay && (
+            <>
+              <Col className="colorback ombra" md={{ span: 0.9, offset: 0.9 }}>
+                <Row className="textprofiledark text-uppercase text-md-auto colorback">
                   {" "}
+                  <center>
+                    {" "}
+                    <FontAwesomeIcon
+                      icon={faArrowPointer}
+                      title={responseDay.profile_desc}
+                      className="falured"
+                    />{" "}
+                    Visite al profilo <br></br>giornaliere
+                  </center>
+                </Row>{" "}
+                <CountUp
+                  end={responseDay.profile_views}
+                  duration={5}
+                  className="valuesprofiledark colorback"
+                />
+              </Col>
+              <Col className="colorback ombra" md={{ span: 0.9, offset: 0.9 }}>
+                <Row className="textprofiledark text-uppercase text-center colorback">
+                  {" "}
+                  <center>
+                    {" "}
+                    <FontAwesomeIcon
+                      icon={faLocationDot}
+                      title={responseDay.geo_desc}
+                      className="sandybrown"
+                    />{" "}
+                    Click luoghi <br></br>giornaliere
+                  </center>
+                </Row>{" "}
+                <CountUp
+                  end={responseDay.geo_click}
+                  duration={5}
+                  className="valuesprofiledark colorback"
+                />{" "}
+              </Col>
+              <Col className="colorback ombra" md={{ span: 0.9, offset: 0.9 }}>
+                <Row className="textprofiledark text-uppercase text-center colorback">
+                  {" "}
+                  <center>
+                    <FontAwesomeIcon
+                      icon={faEnvelope}
+                      title={responseDay.email_desc}
+                      className="indigodye"
+                    />{" "}
+                    Contatti email <br></br>giornaliere
+                  </center>
+                </Row>{" "}
+                <CountUp
+                  end={responseDay.email_contacts}
+                  duration={5}
+                  className="valuesprofiledark colorback"
+                />{" "}
+              </Col>
+            </>
+          )}
+        </Row>
+
+        {responseLifeTime && (
+          <>
+            <Row
+              xs={1}
+              sm={1}
+              md={2}
+              lg={4}
+              className="d-flex flex-wrap justify-content-center p-4 "
+              fluid="true"
+            >
+              <Col>
+                <h3>
                   <FontAwesomeIcon
-                    icon={faLocationDot}
-                    title={responseDay.geo_desc}
+                    icon={faBuildingUser}
+                    title={JSON.stringify(responseLifeTime.data[0].description)}
+                    className="myrtlegreen"
                   />{" "}
-                  Click luoghi <br></br>giornaliere
-                </center>
-              </Row>{" "}
-              <CountUp
-                end={responseDay.geo_click}
-                duration={5}
-                className="valuesprofiledark colorback"
-              />{" "}
-            </Col>
-            <Col className="colorback ombra" md={{ span: 0.9, offset: 0.9 }}>
-              <Row className="textinsightsdark text-uppercase text-center colorback">
-                <center>
+                  Grafico delle città
+                </h3>
+                <CityGraph data={responseLifeTime.data} />
+              </Col>
+              <Col>
+                <h3>
                   <FontAwesomeIcon
-                    icon={faEnvelope}
-                    title={responseDay.email_desc}
+                    icon={faEarthAmericas}
+                    title={JSON.stringify(responseLifeTime.data[1].description)}
+                    className="chartreuse"
                   />{" "}
-                  Contatti email <br></br>giornaliere
-                </center>
-              </Row>{" "}
-              <CountUp
-                end={responseDay.email_contacts}
-                duration={5}
-                className="valuesprofiledark colorback"
-              />{" "}
-            </Col>
-          </>
-        )}
-      </Row>
-      {responseLifeTime && (
-        <>
-          <Row
-            xs={1}
-            sm={1}
-            md={2}
-            lg={4}
-            className="d-flex flex-wrap justify-content-center p-4 "
-            fluid="true"
-          >
-            <Col>
-              <h3>
-                <FontAwesomeIcon
-                  icon={faBuildingUser}
-                  title={JSON.stringify(responseLifeTime.data[0].description)}
-                />{" "}
-                Grafico delle città
-              </h3>
-              <CityGraph data={responseLifeTime.data} />
-            </Col>
-            <Col>
-              <h3>
-                <FontAwesomeIcon
-                  icon={faEarthAmericas}
-                  title={JSON.stringify(responseLifeTime.data[1].description)}
-                />{" "}
-                Grafico delle Nazioni
-              </h3>
-              <CountryGraph data={responseLifeTime.data} />
-            </Col>
-            <Col>
-              <h3>
-                <FontAwesomeIcon
-                  icon={faLanguage}
-                  title={JSON.stringify(responseLifeTime.data[3].description)}
-                />{" "}
-                Grafico delle lingue
-              </h3>
-              <LangChart data={responseLifeTime.data} />
-            </Col>
-          </Row>
-          <Row>
-            <Col>
-              <h3>
-                {responseFollower && (
+                  Grafico delle Nazioni
+                </h3>
+                <CountryGraph data={responseLifeTime.data} />
+              </Col>
+              <Col>
+                <h3>
+                  <FontAwesomeIcon
+                    icon={faLanguage}
+                    title={JSON.stringify(responseLifeTime.data[3].description)}
+                    className="cocoabrown"
+                  />{" "}
+                  Grafico delle lingue
+                </h3>
+                <LangChart data={responseLifeTime.data} />
+              </Col>
+            </Row>
+            <Row xs={1} sm={1} lg={2}>
+              <Col className="align-items-center">
+                <h3>
                   <FontAwesomeIcon
                     icon={faUserPlus}
-                    title={JSON.stringify(responseFollower.data[0].description)}
-                  />
-                )}{" "}
-                Richiesta follower Count:
-              </h3>
-              <select value={timeframe} onChange={handleTimeframeChange}>
-                <option value="today">Oggi</option>
-                <option value="week">Una settimana</option>
-                <option value="month">Un mese</option>
-              </select>
-              <button onClick={handleFollowerCountReq}>Invia richiesta</button>
-              {responseFollower && (
-                <FollowerCountGraph data={responseFollower.data} />
-              )}
-            </Col>
-            <Col>
-              <h3>
-                {" "}
-                <FontAwesomeIcon
-                  icon={faPersonHalfDress}
-                  title={JSON.stringify(responseLifeTime.data[2].description)}
-                />{" "}
-                Grafico di genere per età
-              </h3>
-              <GenderAgeChart data={responseLifeTime.data} />
-            </Col>
-          </Row>
-        </>
-      )}
-    </Container>
+                    className="cianofluo"
+                    title={
+                      responseFollower &&
+                      JSON.stringify(responseFollower.data[0].description)
+                    }
+                  />{" "}
+                  grafico follower Count
+                </h3>
+
+                {responseFollower && (
+                  <FollowerCountGraph data={responseFollower.data} />
+                )}
+                <div className="mt-2">
+                  <select
+                    value={timeframe}
+                    onChange={handleTimeframeChange}
+                    className="dropdown"
+                  >
+                    <option value="today">Oggi</option>
+                    <option value="week">Una settimana</option>
+                    <option value="month">Un mese</option>
+                  </select>
+                  <Button
+                    className="button mb-3 floatright  textprofiledark"
+                    onClick={handleFollowerCountReq}
+                    disabled={isLoading}
+                    variant="outline-dark"
+                  >
+                    Invia richiesta
+                  </Button>
+                </div>
+              </Col>
+              <Col>
+                <h3>
+                  {" "}
+                  <FontAwesomeIcon
+                    icon={faPersonHalfDress}
+                    title={JSON.stringify(responseLifeTime.data[2].description)}
+                    className="skobeloff"
+                  />{" "}
+                  Grafico di genere per età
+                </h3>{" "}
+                <GenderAgeChart data={responseLifeTime.data} />
+              </Col>
+            </Row>
+          </>
+        )}
+      </Container>
+      <Footer></Footer>
+    </>
   );
 }
