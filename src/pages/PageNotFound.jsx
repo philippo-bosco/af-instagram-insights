@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import secureLocalStorage from "react-secure-storage";
-import Typed from "react-typed";
+import Typewriter from "typewriter-effect";
 
 //import custom
 import "../styles/PageNotFoundStyle.css";
 
 export default function PageNotFound() {
   const navigate = useNavigate();
-  const [countdown, setCountdown] = useState(5);
-  const storedAT = secureLocalStorage.getItem("AT");
+  const [countdown, setCountdown] = useState(10);
+  const storedIsAuth = secureLocalStorage.getItem("isAuth");
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -29,16 +29,18 @@ export default function PageNotFound() {
 
   return (
     <main className="container" style={{ color: "white" }}>
-      <h1>
-        <Typed
-          strings={["404 Page Not Found"]}
-          typeSpeed={80}
-          backSpeed={60}
-          loop={false}
-        />
-      </h1>
+      <Typewriter
+        onInit={typewriter => {
+          typewriter
+            .typeString(
+              "<strong style='font-size: 2em;'>404, Page not Found!</strong>"
+            )
+            .pauseFor(5000)
+            .start();
+        }}
+      />
       <br />
-      {storedAT ? (
+      {storedIsAuth ? (
         <p>
           Redirecting to Home in <strong>{countdown} </strong>
           seconds.

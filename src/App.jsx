@@ -1,5 +1,4 @@
 import React from "react";
-import { useState } from "react";
 import { Route, Routes } from "react-router-dom";
 
 //import custom
@@ -13,52 +12,40 @@ import HomeInsights from "./pages/HomeInsights";
 
 /*
  * TODO phil:
- * - aggiungere controlli PrivateRoutes /Insights
+ * - aggiungere loading spinenr in tutte le pagine
+ * - sistemare doppie richieste HomeAccount
+ * - sistermare doppie richieste HomeInsights
+ * - sistemare doppie richieste PrivateRoutes
+ * - sistemare doppie richieste navBar
+ * - sistemare doppie richieste LastPost
  */
 
 export default function App() {
-  const [isAuthenticated, setisAuthenticated] = useState(null);
-  const [FBaccessTOKEN, setFBaccessToken] = useState("");
-
   return (
-    <div>
-      <NavigationBar isAuth={isAuthenticated} toggleAuth={setisAuthenticated} />
+    <>
+      <NavigationBar />
       <Routes>
+        <Route path="/login" element={<Login />} />
         <Route
-          path="/login"
+          exact
+          path="/"
           element={
-            <Login
-              isAuth={isAuthenticated}
-              toggleAuth={setisAuthenticated}
-              AT={FBaccessTOKEN}
-              toggleAT={setFBaccessToken}
-            />
+            <PrivateRoutes>
+              <Home />
+            </PrivateRoutes>
           }
         />
         <Route
+          exact
+          path="/stats"
           element={
-            <PrivateRoutes
-              isAuth={isAuthenticated}
-              toggleAuth={setisAuthenticated}
-            />
+            <PrivateRoutes>
+              <HomeInsights />
+            </PrivateRoutes>
           }
-        >
-          <Route
-            exact
-            path="/"
-            element={
-              <Home
-                isAuth={isAuthenticated}
-                toggleAuth={setisAuthenticated}
-                AT={FBaccessTOKEN}
-                toggleAT={setFBaccessToken}
-              />
-            }
-          />
-          <Route exact path="/stats" element={<HomeInsights />} />
-        </Route>
-        <Route path="*" element={<PageNotFound isAuth={isAuthenticated} />} />
+        />
+        <Route path="*" element={<PageNotFound />} />
       </Routes>
-    </div>
+    </>
   );
 }

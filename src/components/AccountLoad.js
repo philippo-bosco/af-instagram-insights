@@ -37,5 +37,5 @@ export default async function LoadInstagramAccount(responseLogin) {
   );
   await getInstagramAccountId(facebookPages[0].id);
 
-  console.log("tutt'apposto bro");
+  console.log("Login successful! Resources loaded");
 }

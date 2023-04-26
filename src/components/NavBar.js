@@ -6,24 +6,38 @@ import { Link } from "react-router-dom";
 import Container from "react-bootstrap/Container";
 import { Button, Navbar, Nav } from "react-bootstrap";
 
-export default function Navigationbar({ isAuth, toggleAuth }) {
+//import icons
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUser } from "@fortawesome/free-regular-svg-icons";
+import {
+  faChartLine,
+  faRightFromBracket,
+} from "@fortawesome/free-solid-svg-icons";
+
+export default function Navigationbar() {
   const navigate = useNavigate();
+  const [isAuth, setIsAuth] = useState();
   const [isLoading, setIsLoading] = useState(false);
   const [userData, setUserData] = useState(null); // stato per contenere i dati dell'utente
   const storedAT = secureLocalStorage.getItem("AT");
-  const storedIgID = secureLocalStorage.getItem("IgID"); //ig-user-id per effettuare le chiamate alla Graph API
+  const storedIgID = secureLocalStorage.getItem("IgID");
 
   useEffect(() => {
-    async function fetchData() {
+    const fetchData = async () => {
       if (storedAT && storedIgID) {
+        setIsAuth(true);
         const response = await axios.get(
           `https://graph.facebook.com/v16.0/${storedIgID}?fields=followers_count,follows_count,media_count,name,profile_picture_url,username&access_token=${storedAT}`
         );
         setUserData(response.data);
+        secureLocalStorage.setItem("Nav", response.data.followers_count);
+        console.log(response.data);
+      } else {
+        setIsAuth(false);
       }
-    }
+    };
     fetchData();
-  }, [storedAT, storedIgID]);
+  }, [storedIgID, storedAT]);
 
   async function handleLogout() {
     setIsLoading(true);
@@ -36,12 +50,15 @@ export default function Navigationbar({ isAuth, toggleAuth }) {
           // Effettua il logout da Facebook solo se l'access token corrisponde
           window.FB.api("/me/permissions", "delete", null, () => {
             window.FB.logout();
+            console.clear();
             // Rimuove i dati di autenticazione dalla cache del browser
             secureLocalStorage.removeItem("isAuth");
             secureLocalStorage.removeItem("AT");
             secureLocalStorage.removeItem("IgID");
+            secureLocalStorage.removeItem("Nav");
+            secureLocalStorage.removeItem("lastPost");
             // Aggiorna lo stato dell'autenticazione
-            toggleAuth(false);
+            setIsAuth(false);
             setIsLoading(false);
             // Torna alla pagina di login
             navigate("/login");
@@ -52,9 +69,10 @@ export default function Navigationbar({ isAuth, toggleAuth }) {
           secureLocalStorage.removeItem("isAuth");
           secureLocalStorage.removeItem("AT");
           secureLocalStorage.removeItem("IgID");
+          secureLocalStorage.removeItem("Nav");
           secureLocalStorage.removeItem("lastPost");
           // Aggiorna lo stato dell'autenticazione
-          toggleAuth(false);
+          setIsAuth(false);
           setIsLoading(false);
           // Torna alla pagina di login
           navigate("/login");
@@ -78,6 +96,7 @@ export default function Navigationbar({ isAuth, toggleAuth }) {
             padding: "0",
             backgroundColor: "#000",
           }}
+          className="textinsightsdark"
         >
           <Container
             fluid
@@ -91,43 +110,54 @@ export default function Navigationbar({ isAuth, toggleAuth }) {
                 height="50"
                 className="d-inline-block align-top rounded-circle"
               />
-              <span style={{ marginLeft: "10px" }}>
+              <span style={{ marginLeft: "10px" }} className="textinsightsdark">
                 Welcome {userData.name}
               </span>
             </Navbar.Brand>
             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
             <Navbar.Collapse id="responsive-navbar-nav">
               <Nav className="me-auto">
-                <Nav.Link className="navbarStats" disabled>
+                <Nav.Link className="navbarStats textinsightsdark" disabled>
                   post {userData.media_count}
                 </Nav.Link>
-                <Nav.Link className="navbarStats" disabled>
+                <Nav.Link className="navbarStats textinsightsdark" disabled>
                   seguiti {userData.follows_count}
                 </Nav.Link>
-                <Nav.Link className="navbarStats" disabled>
+                <Nav.Link className="navbarStats textinsightsdark" disabled>
                   follower {userData.followers_count}
                 </Nav.Link>
               </Nav>
               <Nav>
                 <Link to="/">
-                  <Button className="button">Profilo</Button>
+                  <Button className="button">
+                    <FontAwesomeIcon icon={faUser} />
+                    <span> </span>Profilo
+                  </Button>
                 </Link>
+
                 <Link to="/stats">
-                  <Button className="button">Insights</Button>
+                  <Button className="button">
+                    <FontAwesomeIcon icon={faChartLine} />
+                    <span> </span>Insights
+                  </Button>
                 </Link>
                 <Button
-                  className="button mb-3 floatright"
+                  className="button mb-3 floatright textinsightsdark"
                   onClick={handleLogout}
                   disabled={isLoading}
-                  variant="outline-light"
+                  variant="outline-dark"
                 >
-                  {isLoading && (
+                  {isLoading ? (
                     <span
                       className="spinner-border spinner-border-sm mr-2"
                       role="status"
                       aria-hidden="true"
                     ></span>
-                  )}
+                  ) : (
+                    <span>
+                      <FontAwesomeIcon icon={faRightFromBracket} />{" "}
+                    </span>
+                  )}{" "}
                   Logout
                 </Button>
               </Nav>
